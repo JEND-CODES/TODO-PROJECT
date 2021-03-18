@@ -2,7 +2,7 @@
 Améliorations d'une application existante de ToDo &amp; Co
 
 ## Avancées
-- Clone du projet pour analyses
+- Clone du projet d'origine pour analyses : alertes émises par Symfony Insight
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/4ff59ff646f54b828ff943c19a245dbd)](https://www.codacy.com/gh/JEND-CODES/TODO-PROJECT/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=JEND-CODES/TODO-PROJECT&amp;utm_campaign=Badge_Grade)
 
