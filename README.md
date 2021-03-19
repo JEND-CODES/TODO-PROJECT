@@ -10,7 +10,7 @@
 
 ![TODO-PROJECT](https://raw.githubusercontent.com/JEND-CODES/TODO-PROJECT/main/documentation/diagrammes/Cas_Gestion_T%C3%A2ches_User_P8_V1.png)
 
-![TODO-PROJECT](https://raw.githubusercontent.com/JEND-CODES/TODO-PROJECT/main/documentation/diagrammes/S%C3%A9quence_Gestion_Utilisateurs_P8_V2.png)
+![TODO-PROJECT](https://raw.githubusercontent.com/JEND-CODES/TODO-PROJECT/main/documentation/diagrammes/S%C3%A9quence_Gestion_Utilisateurs_P8_V3.png)
 
 ![TODO-PROJECT](https://raw.githubusercontent.com/JEND-CODES/TODO-PROJECT/main/documentation/diagrammes/Diagramme_de_Classes_P8_V1.png)
 
