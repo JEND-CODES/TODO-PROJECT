@@ -4,12 +4,36 @@
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
  */
 
+ @import url('https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap');
+
 body {
     padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+    font-family: 'Lexend Deca', sans-serif;
 }
 
 .slide-image {
     width: 100%;
+    max-width: 700px;
+}
+
+.center-box {
+    text-align: center;
+}
+
+.special-title {
+    font-size: 20px;
+}
+
+.regular-spacer {
+    height:10px;
+}
+
+.task-infos {
+  font-size:12px;
+}
+
+.medium-spacer {
+  height:50px;
 }
 
 .carousel-holder {
@@ -52,3 +76,203 @@ body {
 footer {
     margin: 50px 0;
 }
+
+.btn {
+    border: 0px solid transparent;
+    margin:4px;
+}
+
+.btn-primary {
+    box-shadow: 1px 6px 12px rgba(0, 0, 0, 0.2);
+    font-weight: normal;
+  }
+  
+  .btn-primary:hover,
+  .btn-primary:active,
+  .btn-primary:visited {
+    outline-style: none;
+  }
+  
+  .btn-secondary {
+    box-shadow: 1px 6px 12px rgba(0, 0, 0, 0.2);
+    font-weight: normal;
+  }
+  
+  .btn-secondary:hover,
+  .btn-secondary:active,
+  .btn-secondary:visited {
+    outline-style: none;
+  }
+  
+  .btn-success {
+    box-shadow: 1px 6px 12px rgba(0, 0, 0, 0.2);
+    font-weight: normal;
+  }
+  
+  .btn-success:hover,
+  .btn-success:active,
+  .btn-sucess:visited,
+  .btn-sucess.focus {
+    outline-style: none;
+  }
+  
+  .btn-danger {
+    box-shadow: 1px 6px 12px rgba(0, 0, 0, 0.2);
+    font-weight: normal;
+  }
+  
+  .btn-danger:hover,
+  .btn-danger:active,
+  .btn-danger:visited {
+    outline-style: none;
+  }
+  
+  .btn-warning {
+    box-shadow: 1px 6px 12px rgba(0, 0, 0, 0.2);
+    font-weight: normal;
+  }
+  
+  .btn-warning:hover,
+  .btn-warning:active,
+  .btn-warning:visited {
+    outline-style: none;
+  }
+  
+  .btn-info {
+    box-shadow: 1px 6px 12px rgba(0, 0, 0, 0.2);
+    font-weight: normal;
+  }
+  
+  .btn-info:hover,
+  .btn-info:active,
+  .btn-info:visited {
+    outline-style: none;
+  }
+  
+  .btn-light {
+    box-shadow: 1px 6px 12px rgba(0, 0, 0, 0.2);
+    font-weight: normal;
+  }
+  
+  .btn-light:hover,
+  .btn-light:active,
+  .btn-light:visited {
+    outline-style: none;
+  }
+  
+  .btn-dark {
+    box-shadow: 1px 6px 12px rgba(0, 0, 0, 0.2);
+    font-weight: normal;
+  }
+  
+  .btn-dark:hover,
+  .btn-dark:active,
+  .btn-dark:visited {
+    outline-style: none;
+  }
+  
+  input[type=text] {
+    width: 100%;
+    max-width:300px;
+    padding: 10px 13px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: 0.5s;
+    outline: none;
+    background-color: white;
+  }
+  
+  input[type=text]:focus {
+    border: 1px solid #555;
+  }
+  
+  input[type=search] {
+    width: 100%;
+    padding: 10px 13px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: 0.5s;
+    outline: none;
+    background-color: white;
+  }
+  
+  input[type=search]:focus {
+    border: 1px solid #555;
+  }
+  
+  input[type=password] {
+    width: 100%;
+    max-width:300px;
+    padding: 10px 13px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: 0.5s;
+    outline: none;
+    background-color: white;
+  }
+  
+  input[type=password]:focus {
+    border: 1px solid #555;
+  }
+  
+  input[type=email] {
+    width: 100%;
+    max-width:300px;
+    padding: 10px 13px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: 0.5s;
+    outline: none;
+    background-color: white;
+  }
+  
+  input[type=email]:focus {
+    border: 1px solid #555;
+  }
+  
+  textarea {
+    width: 100%;
+    max-width:800px;
+    padding: 10px 13px;
+    height: 150px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: 0.5s;
+    outline: none;
+    background-color: white;
+  }
+  
+  textarea::-webkit-scrollbar {
+    width: 1px;
+  }
+  
+  textarea:focus {
+    border: 1px solid #555;
+  }
+
+  select {
+    width: 100%;
+    max-width:300px;
+    padding: 10px 8px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: 0.5s;
+    outline: none;
+    background-color: white;
+  }
+  
+  select:focus {
+    border: 1px solid #555;
+  }
