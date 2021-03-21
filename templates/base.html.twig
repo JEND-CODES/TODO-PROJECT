@@ -5,10 +5,10 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="">
-        <meta name="author" content="">
+        <meta name="description" content="TO DO LIST APP">
+        <meta name="author" content="TODO AND CO">
 
-        <title>To Do List app</title>
+        <title>TO DO LIST APP</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
@@ -25,12 +25,11 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-light navbar-fixed-top" style="background-color: #e3f2fd;" role="navigation">
+        <nav class="navbar navbar-light navbar-fixed-top" style="background-color: white;box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.2);" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#">To Do List app</a>
-
-                    <img src="{{ asset('img/Logo_OpenClassrooms.png') }}" alt="OpenClassrooms" />
+                    <img src="{{ asset('img/Logo_OpenClassrooms.png') }}" alt="OpenClassrooms" title="OpenClassrooms"/>
+                    <a class="navbar-brand" href="/" style="color:black;">TO DO LIST APP</a>
                 </div>
             </div>
         </nav>
@@ -38,7 +37,13 @@
         <!-- Page Content -->
         <div class="container">
             <div class="row">
-                {# <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a> #}
+
+                <!-- CONDITION AJOUTÉE POUR AFFICHER LE BOUTON SEULEMENT POUR UN UTILISATEUR AVEC LE ROLE ADMIN -->
+                {# {% if app.user and app.user.role == 'ROLE_ADMIN' %} #}
+                {% if app.user and is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
+                    <a href="{{ path('user_list') }}" class="btn btn-info">Gérer les utilisateurs</a>
+                {% endif %}
 
                 {% if app.user %}
                 <a href="{{ path('logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
@@ -64,7 +69,12 @@
                     {% endfor %}
 
                     {% block header_title %}{% endblock %}
-                    {% block header_img %}<img class="slide-image" src="{{ asset('img/todolist_homepage.jpg') }}" alt="todo list">{% endblock %}
+
+                    {% block header_img %}
+                        <div class="center-box">
+                            <img class="slide-image" src="{{ asset('img/todolist_homepage_2.jpg') }}" alt="todo list">
+                        </div>
+                    {% endblock %}
                 </div>
             </div>
 
@@ -91,11 +101,7 @@
 
         </div>
 
-        {# Problème repéré : ce fichier n'était pas présent au départ ! 
-        <script src="{{ asset('js/jquery.min.js') }}"></script> 
-        #}
         <script src="{{ asset('js/jquery.min.js') }}"></script>
-
         <script src="{{ asset('js/bootstrap.min.js') }}"></script>
     </body>
 </html>

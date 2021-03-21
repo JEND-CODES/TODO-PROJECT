@@ -1,11 +1,13 @@
 {% extends 'base.html.twig' %}
 
+{% block header_img %}{% endblock %}
+
 {% block body %}
-    <div class="row">
-        {# {{ form_start(form, {'action' : path('task_edit', { 'id' : task.id })}) }}
+    <div class="row center-box">
+        {{ form_start(form, {'action' : path('task_edit', { 'id' : task.id })}) }}
             {{ form_widget(form) }}
 
-            <button type="submit" class="btn btn-success pull-right">Modifier</button>
-        {{ form_end(form) }} #}
+            <button type="submit" class="btn btn-success">Modifier</button>
+        {{ form_end(form) }}
     </div>
 {% endblock %}
