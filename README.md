@@ -4,6 +4,10 @@
 
 [![SymfonyInsight](https://insight.symfony.com/projects/a2b7ac96-199d-49c1-a697-070378224166/big.svg)](https://insight.symfony.com/projects/a2b7ac96-199d-49c1-a697-070378224166)
 
+## HOMEPAGE
+
+![TODO-PROJECT](https://raw.githubusercontent.com/JEND-CODES/TODO-PROJECT/main/public/img/Capcha_project_P8_V1.png)
+
 ## DIAGRAMMES UML
 
 ![TODO-PROJECT](https://raw.githubusercontent.com/JEND-CODES/TODO-PROJECT/main/documentation/diagrammes/Cas_Gestion_T%C3%A2ches_Admin_P8_V1.png)
@@ -17,6 +21,10 @@
 ![TODO-PROJECT](https://raw.githubusercontent.com/JEND-CODES/TODO-PROJECT/main/documentation/diagrammes/Mod%C3%A8le_de_donn%C3%A9es_P8_V1.png)
 
 ![TODO-PROJECT](https://raw.githubusercontent.com/JEND-CODES/TODO-PROJECT/main/documentation/diagrammes/Concepteur_BDD_Todolist_v2.png)
+
+## CODE COVERAGE
+
+![TODO-PROJECT](https://raw.githubusercontent.com/JEND-CODES/TODO-PROJECT/main/public/img/Coverage_results_P8_V4.JPG)
 
 ## INSTRUCTIONS D'INSTALLATION
 ``` bash
