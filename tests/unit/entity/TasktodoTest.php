@@ -62,5 +62,23 @@ class TasktodoTest extends TestCase
 
         $this->assertInstanceOf(Usertodo::class, $tasktodo->getUsertodo());
     }
+
+    public function testIsDone()
+    {
+        $tasktodo = new Tasktodo();
+
+        $tasktodo->setIsDone(true);
+
+        $this->assertEquals($tasktodo->getIsDone(), true);
+    }
+
+    public function testToggle()
+    {
+        $tasktodo = new Tasktodo();
+
+        $tasktodo->toggle(true);
+
+        $this->assertEquals($tasktodo->isDone(), true);
+    }
     
 }

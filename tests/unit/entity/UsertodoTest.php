@@ -9,7 +9,7 @@ use App\Entity\Tasktodo;
 class UsertodoTest extends TestCase
 {
 
-    public function testGetId()
+    public function testId()
 	{
 		$usertodo = new Usertodo();
 
@@ -18,7 +18,7 @@ class UsertodoTest extends TestCase
 		$this->assertEquals($id, $usertodo->getId());
 	}
 
-    public function testGetUsername()
+    public function testUsername()
 	{
 		$usertodo = new Usertodo();
 
@@ -103,5 +103,12 @@ class UsertodoTest extends TestCase
 		
 		$this->assertEquals($role, $usertodo->getRole());
 	}
+
+	public function testEraseCredentials()
+    {
+        $usertodo = new Usertodo();
+
+        $this->assertEquals($usertodo->eraseCredentials(), null);
+    }
     
 }

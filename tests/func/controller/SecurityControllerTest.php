@@ -8,6 +8,41 @@ use App\Repository\UsertodoRepository;
 class SecurityControllerTest extends WebTestCase
 {
 
+    public function testLoginHome()
+    {
+        $client = static::createClient();
+
+        $container = $client->getContainer();
+
+        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+
+        $testManager = $usertodoRepo->findOneByUsername('manager');
+        // $testUser = $usertodoRepo->findOneByUsername('billy');
+
+        $client->loginUser($testManager);
+
+        $crawler = $client->request('GET', '/');
+        
+        $this->assertResponseIsSuccessful();
+
+        $this->assertSelectorNotExists('form');
+
+        $this->assertSame(1, $crawler->filter('html:contains("Bienvenue sur Todo List, l\'application vous permettant de gérer l\'ensemble de vos tâches sans effort !")')->count());
+
+        $this->assertSelectorExists('a', 'Créer un utilisateur');
+
+        $this->assertSelectorExists('a', 'Gérer les utilisateurs');
+
+        $this->assertSelectorExists('a', 'Se déconnecter');
+
+        $this->assertSelectorExists('a', 'Créer une nouvelle tâche');
+
+        $this->assertSelectorExists('a', 'Consulter la liste des tâches à faire');
+
+        $this->assertSelectorExists('a', 'Consulter la liste des tâches terminées');
+
+    }
+
     public function testLoginManager()
     {
         $client = static::createClient();
@@ -21,9 +56,12 @@ class SecurityControllerTest extends WebTestCase
 
         $client->loginUser($testManager);
 
-        $client->request('GET', '/users');
+        $crawler = $client->request('GET', '/users');
         
         $this->assertResponseIsSuccessful();
+
+        $this->assertSame(1, $crawler->filter('html:contains("Liste des utilisateurs")')->count());
+
     }
     
     public function testLogin()
@@ -38,12 +76,14 @@ class SecurityControllerTest extends WebTestCase
 
         $this->assertSame(1, $crawler->filter('input[name="_password"]')->count());
 
+        $this->assertSame(1, $crawler->filter('html:contains("Se connecter")')->count());
+
         $form = $crawler->selectButton('Se connecter')->form();
 
-        $form['_username'] = 'user';
+        $form['_username'] = 'pseudo';
 
-        $form['_password'] = 'test';
-
+        $form['_password'] = 'testtest';
+        
         $client->submit($form); 
 
         $crawler = $client->followRedirect();
@@ -51,18 +91,36 @@ class SecurityControllerTest extends WebTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $this->assertSame("TO DO LIST APP", $crawler->filter('a')->text());
-       
+
+        $this->assertSelectorExists('a', 'Se déconnecter');
+
     }
     
-    public function testRedirect()
+    public function testLogout()
     {
         $client = static::createClient();
 
-        $client->request('GET', '/logout');
+        $container = $client->getContainer();
+
+        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+
+        $testManager = $usertodoRepo->findOneByUsername('manager');
+
+        $client->loginUser($testManager);
+
+        $crawler = $client->request('GET', '/');
+        
+        $this->assertResponseIsSuccessful();
+
+        $this->assertSame(1, $crawler->filter('html:contains("Bienvenue sur Todo List, l\'application vous permettant de gérer l\'ensemble de vos tâches sans effort !")')->count());
+
+        $crawler = $client->request('GET', '/logout');
 
         $this->assertResponseRedirects();
+
+        $this->assertSame(0, $crawler->filter('html:contains("Bienvenue sur Todo List, l\'application vous permettant de gérer l\'ensemble de vos tâches sans effort !")')->count());
+
     }
 
     
-
 }
