@@ -26,7 +26,7 @@ php bin/console doctrine:fixtures:load
 
 ## 5 • Apportez vos modifications au projet
 
-Consultez la documentation sur l'authentification : [LINK](https://github.com/JEND-CODES/TODO-PROJECT)
+Consultez la documentation sur [l'authentification](https://github.com/JEND-CODES/TODO-PROJECT)
 
 ## 6 • Réalisez des tests unitaires de vos modifications :
 
@@ -62,9 +62,7 @@ git push -u origin <branch-name>
 
 ## 11 • Documentez vos modifications dans une Pull request
 
-```text
-Tutoriel : https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests
-```
+Consultez ce [Tutoriel](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests)
 
 ## 12 • Supprimez votre branche de déploiement :
 
@@ -72,8 +70,6 @@ Tutoriel : https://docs.github.com/en/github/collaborating-with-issues-and-pull-
 git branch -d <branch-name>
 ```
 
-## 13 • En option, analysez une comparaison des performances de l'application suite à vos modifications en utilisant l'extension Blackfire
+## 13 • En option, effectuez des comparaisons de performances de l'application suite à vos modifications en utilisant l'extension Blackfire
 
-```text
-Extension Google Chrome : https://blackfire.io/docs/integrations/browsers/chrome
-```
+Extension Google Chrome [Blackfire Profiler](https://chrome.google.com/webstore/detail/blackfire-profiler/miefikpgahefdbcgoiicnmpbeeomffld?hl=fr&pageId=108863020526025791688)
