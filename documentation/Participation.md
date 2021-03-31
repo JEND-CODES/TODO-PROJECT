@@ -1,4 +1,4 @@
-# Comment contribuer au projet ?
+# COMMENT CONTRIBUER AU PROJET
 
 ## 1 • Clonez le projet
 
