@@ -26,6 +26,10 @@ php bin/console doctrine:fixtures:load
 
 ## 5 • Apportez vos modifications au projet
 
+```text
+Consultez la documentation sur l'authentification : 
+```
+
 ## 6 • Réalisez des tests unitaires de vos modifications :
 
 ```text
@@ -60,6 +64,10 @@ git push -u origin <branch-name>
 
 ## 11 • Documentez vos modifications dans une Pull request
 
+```text
+Tutoriel : https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests
+```
+
 ## 12 • Supprimez votre branche de déploiement :
 
 ```text
@@ -67,3 +75,7 @@ git branch -d <branch-name>
 ```
 
 ## 13 • En option, analysez une comparaison des performances de l'application suite à vos modifications en utilisant l'extension Blackfire
+
+```text
+Extension Google Chrome : https://blackfire.io/docs/integrations/browsers/chrome
+```
