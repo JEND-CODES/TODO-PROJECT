@@ -12,13 +12,13 @@ git clone https://github.com/JEND-CODES/TODO-PROJECT
 composer install
 ```
 
-## 3 • Indiquez l'accès à votre base de données dans le fichier .env, puis créez-la :
+## 3 • Indiquez l'accès à votre base de données dans le fichier .env, puis créez-la
 
 ```text
 php bin/console doctrine:database:create
 ```
 
-## 4 • Générez les fixtures :
+## 4 • Générez les fixtures
 
 ```text
 php bin/console doctrine:fixtures:load
@@ -28,31 +28,31 @@ php bin/console doctrine:fixtures:load
 
 Consultez la documentation sur [l'authentification](https://github.com/JEND-CODES/TODO-PROJECT)
 
-## 6 • Réalisez des tests unitaires de vos modifications :
+## 6 • Réalisez des tests unitaires de vos modifications
 
 ```text
 php bin/phpunit
 ```
 
-## 7 • Créez éventuellement un dossier de couverture html des tests :
+## 7 • Créez éventuellement un dossier de couverture html des tests
 
 ```text
 php bin/phpunit --coverage-html <folder>
 ```
 
-## 8 • Créez une branche de déploiement de vos modifications : 
+## 8 • Créez une branche de déploiement de vos modifications 
 
 ```text
 git branch <branch-name>
 ```
 
-## 9 • Basculez sur cette branche :
+## 9 • Basculez sur cette branche
 
 ```text
 git checkout <branch-name>
 ```
 
-## 10 • Envoyez vos nouveaux fichiers sur cette branche :
+## 10 • Envoyez vos nouveaux fichiers sur cette branche
 
 ```text
 git add
@@ -62,9 +62,9 @@ git push -u origin <branch-name>
 
 ## 11 • Documentez vos modifications dans une Pull request
 
-Consultez ce [Tutoriel](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests)
+Consultez ce [tutoriel Github](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests)
 
-## 12 • Supprimez votre branche de déploiement :
+## 12 • Supprimez votre branche de déploiement
 
 ```text
 git branch -d <branch-name>
