@@ -27,7 +27,7 @@ php bin/console doctrine:fixtures:load
 ## 5 • Apportez vos modifications au projet
 
 ```text
-Consultez la documentation sur l'authentification : 
+Consultez la documentation sur l'authentification : [This is a link](https://github.com/JEND-CODES/TODO-PROJECT)
 ```
 
 ## 6 • Réalisez des tests unitaires de vos modifications :
