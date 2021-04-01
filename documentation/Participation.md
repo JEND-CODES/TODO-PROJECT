@@ -79,3 +79,15 @@ git branch -d <branch-name>
 ## 13 • En option, effectuez des comparaisons de performances de l'application suite à vos modifications en utilisant l'extension Blackfire
 
 Extension Google Chrome [Blackfire Profiler](https://chrome.google.com/webstore/detail/blackfire-profiler/miefikpgahefdbcgoiicnmpbeeomffld?hl=fr&pageId=108863020526025791688)
+
+### Processus de qualité à utiliser et règles à respecter
+
+``` bash
+* Pour les tests unitaires ou fonctionnels, veillez à proposer une couverture de code qui soit supérieure à 70%
+
+* Elaborez une documentation technique pour toutes les nouvelles fonctionnalités ajoutées au projet
+
+* Réalisez des tests de qualité de code et de performances : en proposant des métriques permettant de vérifier vos nouveaux rapports
+
+* Au cas où vos modifications seraient validées, élaborez par avance un document permettant de comprendre comment contribuer au projet actualisé
+```
