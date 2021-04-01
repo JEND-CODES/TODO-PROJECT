@@ -87,7 +87,7 @@ Extension Google Chrome [Blackfire Profiler](https://chrome.google.com/webstore/
 
 * Elaborez une documentation technique pour toutes les nouvelles fonctionnalités ajoutées au projet
 
-* Réalisez des tests de qualité de code et de performances : en proposant des métriques permettant de vérifier vos nouveaux rapports
+* Réalisez des tests de qualité de code et de performances en proposant des métriques
 
-* Au cas où vos modifications seraient validées, élaborez par avance un document permettant de comprendre comment contribuer au projet actualisé
+* Elaborez un document permettant de comprendre comment contribuer au projet modifié
 ```
