@@ -80,10 +80,10 @@ git branch -d <branch-name>
 
 Extension Google Chrome [Blackfire Profiler](https://chrome.google.com/webstore/detail/blackfire-profiler/miefikpgahefdbcgoiicnmpbeeomffld?hl=fr&pageId=108863020526025791688)
 
-### Processus de qualité à utiliser et règles à respecter
+## Processus de qualité à utiliser et règles à respecter
 
 ``` bash
-* Pour les tests unitaires ou fonctionnels, veillez à proposer une couverture de code qui soit supérieure à 70%
+* Pour les tests unitaires ou fonctionnels, proposez une couverture de code qui soit supérieure à 70%
 
 * Elaborez une documentation technique pour toutes les nouvelles fonctionnalités ajoutées au projet
 
