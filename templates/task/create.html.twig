@@ -1,18 +1,39 @@
 {% extends 'base.html.twig' %}
 
-{% block header_title %}<h1 class="center-box special-title">Créer une nouvelle tâche</h1>{% endblock %}
+{# LES TITRES DES PAGES N'ÉTAIENT PAS INDIQUÉS DANS LE PROJET DE DÉPART #}
+{% block title %}Créer une nouvelle tâche{% endblock %}
+
+{% block header_title %}
+
+    <h1 class="center-box special-title mt-2">Créer une nouvelle tâche</h1>
+    
+{% endblock %}
 
 {% block header_img %}{% endblock %}
 
 {% block body %}
+
     <div class="row center-box">
+
         {{ form_start(form, {'action' : path('task_create')}) }}
+
             {{ form_widget(form) }}
 
             <button type="submit" class="btn btn-success">Ajouter</button>
+
         {{ form_end(form) }}
 
     </div>
 
-    <a href="{{ path('task_list') }}" class="btn btn-primary">Retour à la liste des tâches</a>
+    <p class="center-box">
+
+        <a href="{{ path('task_list') }}" class="btn btn-primary back-to-tasks mt-4">
+
+            <span class="glyphicon glyphicon-arrow-left"></span>
+            &nbsp;&nbsp;Retour à la liste des tâches
+
+        </a>
+
+    </p>
+
 {% endblock %}

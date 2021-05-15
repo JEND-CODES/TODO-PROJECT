@@ -74,8 +74,6 @@ class TaskController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // $this->getDoctrine()->getManager()->flush();
-
             // AJOUTÉ POUR LA DATE DE MISE À JOUR
             $em = $this->getDoctrine()->getManager();
 
@@ -106,7 +104,7 @@ class TaskController extends AbstractController
         $this->getDoctrine()->getManager()->flush();
 
         // AJOUTÉ POUR GÉRER LES MESSAGES TÂCHE TERMINÉE OU RÉOUVERTE
-        if ($task->isDone() == true) {
+        if ($task->isDone() === true) {
 
             $this->addFlash('success', sprintf('La tâche " %s " a bien été marquée comme faite.', $task->getTitle()));
 
@@ -126,7 +124,6 @@ class TaskController extends AbstractController
     {
         // AJOUTÉ POUR EMPÊCHER QU'UN UTILISATEUR SIMPLE NE SUPPRIME UNE TÂCHE DONT IL N'EST PAS L'AUTEUR
         // On vérifie : si l'utilisateur connecté est différent de l'auteur de la tâche
-        // if ($this->security->getUser() !== $task->getUsertodo())
         if ($this->getUser() !== $task->getUsertodo()) 
         {
             // Et si l'utilisateur connecté n'a pas le rôle ADMIN

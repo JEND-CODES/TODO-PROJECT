@@ -61,20 +61,11 @@ class UserController extends AbstractController
     public function editAction(Usertodo $user, Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
 
-        // $resultat = $this->getUser()->getId();
-        // dd($resultat);
-
-        // $resultat2 = $user->getId();
-        // dd($resultat2);
-
         // AJOUTÉ POUR EMPÊCHER UN ADMINISTRATEUR DE MODIFIER SON PROPRE COMPTE
         if ($this->getUser()->getId() === $user->getId()) 
         {
-            /* if(!$this->isGranted('ROLE_SUPER_ADMIN'))
-            { */
-                // https://symfony.com/doc/current/controller.html#managing-errors-and-404-pages
-                throw $this->createNotFoundException('Access Denied.');
-            /* } */
+            // https://symfony.com/doc/current/controller.html#managing-errors-and-404-pages
+            throw $this->createNotFoundException('Access Denied.');
         }
         
         $form = $this->createForm(UsertodoType::class, $user);
@@ -112,11 +103,8 @@ class UserController extends AbstractController
         // AJOUTÉ POUR EMPÊCHER UN ADMINISTRATEUR DE SUPPRIMER SON PROPRE COMPTE
         if ($this->getUser()->getId() === $user->getId()) 
         {
-            /* if(!$this->isGranted('ROLE_SUPER_ADMIN'))
-            { */
-                // https://symfony.com/doc/current/controller.html#managing-errors-and-404-pages
-                throw $this->createNotFoundException('Access Denied.');
-            /* } */
+            // https://symfony.com/doc/current/controller.html#managing-errors-and-404-pages
+            throw $this->createNotFoundException('Access Denied.');
         }
 
         // AJOUTÉ POUR SUPPRIMER DES UTILISATEURS 

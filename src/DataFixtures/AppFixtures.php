@@ -1,16 +1,11 @@
 <?php
 
-// composer require --dev orm-fixtures
-// composer require fakerphp/faker
-
 namespace App\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-
 use App\Entity\Tasktodo;
 use App\Entity\Usertodo;
-
 use App\Repository\TasktodoRepository;
 use App\Repository\UsertodoRepository;
 
@@ -41,21 +36,16 @@ class AppFixtures extends Fixture
           $user = new Usertodo();
           $user->setUsername('manager')
                ->setEmail('manager@test.com')
-               // ->setPassword($this->encoder->encodePassword($user, 'testtest'))
-               
                ->setPassword('$2y$13$j44.vqfgRlcpUGLzU.wAGuN/oMM02AaeVkYyguwQjbiFOPULYOLEu')
                ->setCreatedAt($faker->dateTimeBetween('-1 months'))
                ->setRole('ROLE_SUPER_ADMIN')
           ;
           $manager->persist($user);
-          // $this->addReference('manager-ref', $user);
-
 
           // UTILISATEUR ANONYME
           $user = new Usertodo();
           $user->setUsername('anonyme')
                ->setEmail('anonymous@test.com')
-               // ->setPassword($this->encoder->encodePassword($user, 'testtest'))
                ->setPassword('$2y$13$j44.vqfgRlcpUGLzU.wAGuN/oMM02AaeVkYyguwQjbiFOPULYOLEu')
                ->setCreatedAt($faker->dateTimeBetween('-1 months'))
                ->setRole('ANONYMOUS')
@@ -68,8 +58,6 @@ class AppFixtures extends Fixture
           $user = new Usertodo();
           $user->setUsername('paolo')
                ->setEmail('paolo@gmail.com')
-               // ->setPassword($this->encoder->encodePassword($user, 'testtest'))
-               
                ->setPassword('$2y$13$j44.vqfgRlcpUGLzU.wAGuN/oMM02AaeVkYyguwQjbiFOPULYOLEu')
                ->setCreatedAt($faker->dateTimeBetween('-1 months'))
                ->setRole('ROLE_ADMIN')
@@ -82,7 +70,6 @@ class AppFixtures extends Fixture
           $user = new Usertodo();
           $user->setUsername('nicolas')
                ->setEmail('nicolas@gmail.com')
-               // ->setPassword($this->encoder->encodePassword($user, 'testtest'))
                ->setPassword('$2y$13$j44.vqfgRlcpUGLzU.wAGuN/oMM02AaeVkYyguwQjbiFOPULYOLEu')
                ->setCreatedAt($faker->dateTimeBetween('-1 months'))
                ->setRole('ROLE_USER')

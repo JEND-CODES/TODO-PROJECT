@@ -1,11 +1,19 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
     {% if error %}
-        <div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+
+        <div class="alert alert-danger" role="alert">
+
+            {{ error.messageKey|trans(error.messageData, 'security') }}
+
+        </div>
+
     {% endif %}
 
 <div class="center-box">     
+
     <form action="{{ path('login_check') }}" method="post">
 
         <input placeholder="NOM" type="text" id="username" name="_username" value="{{ last_username }}" required />
@@ -14,7 +22,12 @@
 
         <div class="regular-spacer"></div>
 
-        <button class="btn btn-success" type="submit">Se connecter</button>
+        <button class="btn btn-success" type="submit">
+            Se connecter&nbsp;&nbsp;
+            <span class="glyphicon glyphicon-log-in"></span>
+        </button>
+
     </form>
+
 </div>
 {% endblock %}

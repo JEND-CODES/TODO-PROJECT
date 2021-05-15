@@ -1,14 +1,16 @@
 security:
-    encoders:
-        App\Entity\User:
-            algorithm: bcrypt
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
-    providers:
-        users_in_memory: { memory: null }
+    encoders:
+        App\Entity\Usertodo: bcrypt
+        # AJOUTER UN COST POUR AMÉLIORER L'APPLICATION ??
 
-        in_database:
+    providers:
+        in_memory: { memory: ~ }
+        # METTRE PLUTÔT MEMORY NULL ??
+        doctrine:
             entity:
-                class: App\Entity\User
+                # METTRE PLUTÔT À LA PLACE LE NAMESPACE APP\ENTITY\USERTODO ??
+                class: App:Usertodo
                 property: username
 
     firewalls:
@@ -17,44 +19,44 @@ security:
             security: false
         main:
             anonymous: true
-            # lazy: true
             
-            provider: in_database
-            
+            # AJOUTER ICI UN UserChecker ??
+
+            pattern: ^/
+            provider: doctrine
             form_login:
                 login_path: login
-                check_path: login
-           
-            logout:
-                path: logout
-                target: homepage
-
-        # CE QUI ÉTAIT INDIQUÉ DANS LE PROJET DE DÉPART
-        # main:
-            # anonymous: ~
-            # pattern: ^/
-            # form_login:
-                # login_path: login
-                # check_path: login_check
-                # always_use_default_target_path:  true
-                # default_target_path:  /
-            # logout: ~
-
+                check_path: login_check
+                always_use_default_target_path:  true
+                default_target_path:  /
+            logout: ~
+            # ICI FAIRE DES MODIFICATIONS ??
 
 
             # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#firewalls-authentication
 
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+            # http_basic: true
+            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+
+            # form_login: true
+            # https://symfony.com/doc/current/security/form_login_setup.html
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
-    access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+    
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        # RETIRER LA MENTION ROLE_ALLOWED_TO_SWITCH ??
 
-        # CE QUI ÉTAIT INDIQUÉ DANS LE PROJET DE DÉPART
+
+    access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/users, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+
+        # SE PASSER ICI DE CES DEUX ROUTES PROTÉGÉES, FAIRE PLUTÔT UNE VÉRIFICATION AUTRE PART AVEC DES MESSAGES D'ERREURS ??
+        - { path: ^/users/1/edit, roles: ROLE_SUPER_ADMIN }
+        - { path: ^/users/2/edit, roles: ROLE_SUPER_ADMIN }
+
+        - { path: ^/users, roles: ROLE_ADMIN }
         - { path: ^/, roles: ROLE_USER }
+        

@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Liste des tâches{% endblock %}
+
 {# {% block header_img %}<img class="slide-image" src="{{ asset('img/todolist_content.jpg') }}" alt="todo list" title="todo list">{% endblock %} #}
 
 {% block header_img %}{% endblock %}
@@ -10,72 +12,123 @@
 {% if 'task_list' == app.request.attributes.get('_route') %}
     
     <div class="center-box">
-        <a href="{{ path('task_create') }}" class="btn btn-info" style="margin-bottom:10px;">Créer une tâche</a>
-        <a href="{{ path('task_done') }}" class="btn btn-secondary" style="margin-bottom:10px;">Tâches terminées</a>
+
+        <a href="{{ path('task_create') }}" class="btn create-tasks-button">Créer une tâche</a>
+
+        <a href="{{ path('task_done') }}" class="btn btn-secondary">Tâches terminées</a>
+
     </div>
 
-    <h1 class="center-box special-title">Liste des tâches</h1>
+    <h1 class="center-box special-title mt-4 mb-4">Liste des tâches</h1>
 
 {% endif %}
 
 {% if 'task_done' == app.request.attributes.get('_route') %}
     
     <div class="center-box">
-        <a href="{{ path('task_list') }}" class="btn btn-secondary" style="margin-bottom:10px;">Consulter toutes les tâches</a>
+
+        <a href="{{ path('task_list') }}" class="btn btn-primary">Consulter toutes les tâches</a>
+
     </div>
 
-    <h1 class="center-box special-title">Liste des tâches terminées</h1>
+    <h1 class="center-box special-title mt-4 mb-4">Liste des tâches terminées</h1>
 
 {% endif %}
 
     <div class="row">
+
         {% for task in tasks %}
+
         <div class="col-sm-4 col-lg-4 col-md-4">
-            <div class="thumbnail">
-                <div class="caption" style="height:210px;padding:10px;">
-                    <h4 class="pull-right">
-                        {% if task.isDone %}<span class="glyphicon glyphicon-ok"></span>{% else %}<span class="glyphicon glyphicon-remove"></span>{% endif %}
-                    </h4>
+
+            <div class="thumbnail special-thumbnail">
+
+                <div class="caption special-caption-box">
+
+                    <h5>
+
+                        {% if task.isDone %}
+
+                        <span class="glyphicon glyphicon-ok special-glyph"></span>
+
+                        {% else %}
+
+                        <span class="glyphicon glyphicon-remove special-glyph"></span>
+                        
+                        {% endif %}
+
+                    </h5>
 
                     <div class="regular-spacer"></div>
                     <div class="regular-spacer"></div>
 
-                    <h4><a href="{{ path('task_edit', {'id' : task.id }) }}">{{ task.title|upper|raw }}</a></h4>
+                    <h5>
+                        <a href="{{ path('task_edit', {'id' : task.id }) }}">
+                        {{ task.title|upper|raw }}
+                        </a>
+                    </h5>
 
                     <!-- AJOUTÉ POUR IDENTIFIER L'AUTEUR DE LA TÂCHE -->
                     <!-- AJOUTÉES : DATES DE CRÉATION ET DE MISE À JOUR -->
                     {# {% if task.user.username != 'Anonyme' %} #}
                     {# {% if task.usertodo.id != 2 %} #}
                     {% if (task.usertodo.id != 2) and (task.freshDate is null) %}
-                        <p class="task-infos">PAR {{ task.usertodo.username|upper|raw }} &bull; LE {{ task.createdAt|date('d/m/Y')|raw }}</p>
+
+                        <p class="task-infos">
+                        PAR {{ task.usertodo.username|upper|raw }} &bull; LE {{ task.createdAt|date('d/m/Y')|raw }}
+                        </p>
+
                     {% endif %}
 
                     {% if (task.usertodo.id != 2) and (task.freshDate is not null) %}
-                        <p class="task-infos">PAR {{ task.usertodo.username|upper|raw }} &bull; MIS À JOUR LE {{ task.freshDate|date('d/m/Y')|raw }}</p>
+
+                        <p class="task-infos">
+                        PAR {{ task.usertodo.username|upper|raw }} &bull; MIS À JOUR LE {{ task.freshDate|date('d/m/Y')|raw }}
+                        </p>
+
                     {% endif %}
 
                     {% if (task.usertodo.id == 2) and (task.freshDate is not null) %}
-                        <p class="task-infos">MIS À JOUR LE {{ task.freshDate|date('d/m/Y')|raw }}</p>
+
+                        <p class="task-infos">
+                        MIS À JOUR LE {{ task.freshDate|date('d/m/Y')|raw }}
+                        </p>
+
                     {% endif %}
 
                     <p>{{ task.content }}</p>
 
                 </div>
+
                 <div class="center-box">
+
                     <form action="{{ path('task_toggle', {'id' : task.id }) }}">
+
                         <button class="btn btn-success btn-sm">
-                            {% if not task.isDone %}Marquer comme faite{% else %}Marquer non terminée{% endif %}
+
+                            {% if not task.isDone %}
+                            Marquer comme faite
+                            {% else %}
+                            Marquer non terminée
+                            {% endif %}
+
                         </button>
+
                     </form>
 
                     <!-- AJOUTÉ POUR N'AUTORISER QUE LES AUTEURS DES TÂCHES À SUPPRIMER LEURS TÂCHES OU POUR N'AUTORISER QUE LES UTILISATEURS AYANT LE ROLE ADMIN -->
                     {# {% if app.user and (app.user.role == 'ROLE_ADMIN' or app.user == task.user) %} #}
                     {# {% if is_granted('ROLE_ADMIN') or app.user == task.user %} #}
                     {% if is_granted('ROLE_ADMIN') or app.user.id == task.usertodo.id %}
+
                         <form action="{{ path('task_delete', {'id' : task.id }) }}">
+
                             <button class="btn btn-danger btn-sm" onclick="return(confirm('Validez-vous ce choix ?'));">Supprimer</button>
+
                         </form>
+
                     {% endif %}
+
                     {# <form action="{{ path('task_delete', {'id' : task.id }) }}">
                         <button class="btn btn-danger btn-sm pull-right">Supprimer</button>
                     </form> #}
@@ -83,12 +136,21 @@
                     <div class="regular-spacer"></div>
 
                 </div>
+
             </div>
+
         </div>
+
         {% else %}
+
             <div class="alert alert-warning" role="alert">
-                Il n'y a pas encore de tâche enregistrée sur cette page.
+
+                <p>Il n'y a pas encore de tâche enregistrée sur cette page.</p>
+
             </div>
+
         {% endfor %}
+
     </div>
+
 {% endblock %}

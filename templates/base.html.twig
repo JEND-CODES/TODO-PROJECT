@@ -3,18 +3,30 @@
 
     <head>
         <meta charset="utf-8">
+
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
         <meta name="description" content="TO DO LIST APP">
+
         <meta name="author" content="TODO AND CO">
 
-        <title>TO DO LIST APP</title>
+        {# <title>TO DO LIST APP</title> #}
+        {# LE TITRE N'ÉTAIT PAS INDIQUÉ DANS UN BLOCK TITLE DANS LE PROJET DE DÉPART #}
+        <title>{% block title %}TO DO LIST APP{% endblock %}</title>
 
-        <!-- Bootstrap Core CSS -->
-        <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+        {% block stylesheets %}
 
-        <!-- Custom CSS -->
-        <link href="{{ asset('css/shop-homepage.css') }}" rel="stylesheet">
+        {{ encore_entry_link_tags('app') }}
+
+        {% endblock %}
+        
+        <!-- ??? 
+        QU'EST-CE QUE CES ANNOTATIONS SIGNIFIENT ?
+        - CF. https://github.com/aFarkas/html5shiv
+        - CF. https://github.com/scottjehl/Respond
+        -->
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -22,86 +34,187 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
+
     </head>
 
     <body>
-        <nav class="navbar navbar-light navbar-fixed-top" style="background-color: white;box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.2);" role="navigation">
+
+        <nav class="navbar navbar-light fixed-top main-navbar" role="navigation">
+
             <div class="container">
+
                 <div class="navbar-header">
-                    <img src="{{ asset('img/Logo_OpenClassrooms.png') }}" alt="OpenClassrooms" title="OpenClassrooms"/>
-                    <a class="navbar-brand" href="/" style="color:black;">TO DO LIST APP</a>
+
+                    <img src="{{ asset('build/images/Logo_OpenClassrooms.png') }}" alt="OpenClassrooms" title="OpenClassrooms"/>
+
+                    <a class="navbar-brand main-logo" href="/">TO DO LIST APP</a>
+
                 </div>
+
             </div>
+
         </nav>
 
         <!-- Page Content -->
         <div class="container">
+
             <div class="row">
 
                 <!-- CONDITION AJOUTÉE POUR AFFICHER LE BOUTON SEULEMENT POUR UN UTILISATEUR AVEC LE ROLE ADMIN -->
                 {# {% if app.user and app.user.role == 'ROLE_ADMIN' %} #}
                 {% if app.user and is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
-                    <a href="{{ path('user_list') }}" class="btn btn-info">Gérer les utilisateurs</a>
+                    {# AJOUT DE GLYPHICONS POUR AMÉLIORER LA LISIBILITÉ DES BOUTONS #}
+                    
+                    <!-- AJOUT D'UN MODAL -->
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-light special-modal-button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+
+                        <span class="menu-text">MENU&nbsp;&nbsp;</span>
+
+                        <span class="glyphicon glyphicon-user"></span>
+
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+                        <div class="modal-dialog">
+
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                                </div>
+
+                                <div class="modal-body center-box">
+
+                                    <a href="{{ path('user_create') }}" class="dropdown-item" href="#">Créer un utilisateur</a>
+
+                                    <a href="{{ path('user_list') }}" class="dropdown-item" href="#">Gérer les utilisateurs</a>
+
+                                    <a href="{{ path('logout') }}" class="dropdown-item" href="#">
+
+                                        Se déconnecter&nbsp;&nbsp;
+                                        <span class="glyphicon glyphicon-log-out"></span>
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 {% endif %}
 
-                {% if app.user %}
-                <a href="{{ path('logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
+                {% if app.user and app.user.role == 'ROLE_USER' %}
+
+                <a href="{{ path('logout') }}" class="btn btn-danger logout-button">
+
+                    <span class="logout-text">Se déconnecter&nbsp;&nbsp;</span>
+
+                    <span class="glyphicon glyphicon-log-out"></span>
+
+                </a>
+
                 {% endif %}
 
                 {% if not app.user and 'login' != app.request.attributes.get('_route') %}
-                <a href="{{ path('login') }}" class="btn btn-success">Se connecter</a>
+
+                <a href="{{ path('login') }}" class="btn btn-success">
+
+                    Se connecter&nbsp;&nbsp;
+                    <span class="glyphicon glyphicon-log-in"></span>
+
+                </a>
+
                 {% endif %}
             </div>
 
             <div class="row">
+
                 <div class="col-md-12">
+
                     {% for flash_message in app.session.flashBag.get('success') %}
+
                         <div class="alert alert-success" role="alert">
+
                             <strong>Superbe !</strong> {{ flash_message }}
+
                         </div>
+
                     {% endfor %}
 
                     {% for flash_message in app.session.flashBag.get('error') %}
+
                         <div class="alert alert-danger" role="alert">
+
                             <strong>Oops !</strong> {{ flash_message }}
+
                         </div>
+
                     {% endfor %}
 
                     {% block header_title %}{% endblock %}
 
                     {% block header_img %}
+
                         <div class="center-box">
-                            <img class="slide-image" src="{{ asset('img/todolist_homepage_2.jpg') }}" alt="todo list">
+
+                            <img class="slide-image" src="{{ asset('build/images/todolist_homepage_2.jpg') }}" alt="todo list">
+
                         </div>
+
                     {% endblock %}
+
                 </div>
+
             </div>
 
-            <br />
+            <div class="regular-spacer"></div>
 
             <div class="row">
+
                 <div class="col-md-12">
+
                     {% block body %}{% endblock %}
+
                 </div>
+
             </div>
+
         </div>
-        <!-- /.container -->
 
         <div class="container">
 
             <hr>
+
             <footer>
+
                 <div class="row">
+
                     <div class="col-lg-12">
-                        <p class="pull-right">Copyright &copy; OpenClassrooms</p>
+
+                        <p class="copyright">Copyright &copy; OpenClassrooms</p>
+
                     </div>
+
                 </div>
+
             </footer>
 
         </div>
-
-        <script src="{{ asset('js/jquery.min.js') }}"></script>
-        <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        
     </body>
+
+    {% block javascripts %}
+
+    {{ encore_entry_script_tags('app') }}
+
+    {% endblock %}
+
 </html>

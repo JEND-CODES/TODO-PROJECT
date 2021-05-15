@@ -6,10 +6,12 @@
 git clone https://github.com/JEND-CODES/TODO-PROJECT
 ```
 
-## 2 • Installez les dépendances avec Composer
+## 2 • Installez les dépendances avec Composer et Npm
 
 ```text
 composer install
+npm install
+npm run dev
 ```
 
 ## 3 • Indiquez l'accès à votre base de données dans le fichier .env, puis créez-la

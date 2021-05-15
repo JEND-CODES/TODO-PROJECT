@@ -1,8 +1,47 @@
-@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap');
+@import '~@neos21/bootstrap3-glyphicons';
 
 body {
   padding-top: 70px;
-  font-family: 'Lexend Deca', sans-serif;
+  letter-spacing: 1px;
+}
+
+.main-logo {
+  color: black;
+  font-weight: bold;
+  font-style: italic;
+  letter-spacing: 2px;
+  transition: 0.5s;
+}
+
+.main-logo:hover {
+  color: grey !important;
+  transition: 0.5s;
+}
+
+@media all and (max-width: 320px) {
+  .main-logo {
+    font-size: 12px !important;
+  }
+}
+
+.main-navbar {
+  background-color: white;
+  box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-box-user {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.home-task-button {
+  width: 200px;
+  display: inline-block;
+}
+
+.copyright {
+  text-align: right;
 }
 
 .slide-image {
@@ -16,6 +55,21 @@ body {
 
 .special-title {
   font-size: 20px;
+}
+
+.special-thumbnail {
+  border: 1px solid #c5c5c5;
+  border-radius: 4px;
+  margin: 2px;
+}
+
+.special-caption-box {
+  height: 240px;
+  padding: 10px;
+}
+
+.special-glyph {
+  float: right;
 }
 
 .regular-spacer {
@@ -133,6 +187,7 @@ footer {
 }
 
 .btn-info {
+  color: white;
   box-shadow: 1px 6px 12px rgba(0, 0, 0, 0.2);
   font-weight: normal;
 }
@@ -140,6 +195,7 @@ footer {
 .btn-info:hover,
 .btn-info:active,
 .btn-info:visited {
+  color: white;
   outline-style: none;
 }
 
@@ -269,4 +325,110 @@ select {
 
 select:focus {
   border: 1px solid #555;
+}
+
+.back-to-tasks {
+  width: 280px;
+}
+
+.create-tasks-button {
+  box-shadow: 1px 6px 12px rgba(0, 0, 0, 0.2);
+  font-weight: normal;
+  background: cornflowerblue;
+  color: white;
+}
+
+.create-tasks-button:hover {
+  outline-style: none;
+  color: white;
+  background: rgb(116, 160, 240);
+}
+
+.logout-button {
+  box-shadow: none;
+  background: white;
+  color: black;
+  position: fixed;
+  top: 8px;
+  right: 8%;
+  width: 200px;
+  z-index: 10000;
+}
+
+.special-modal-button {
+  border: 1px solid rgb(185, 185, 185);
+  box-shadow: none;
+  background: white;
+  color: black;
+  position: fixed;
+  top: 8px;
+  right: 8%;
+  width: 200px;
+  z-index: 10000;
+}
+
+.special-modal-button:hover {
+  border: 1px solid cornflowerblue;
+  color: white;
+  background: rgb(182, 203, 243);
+}
+
+@media all and (max-width: 1300px) {
+  .logout-button {
+    right: 4%;
+  }
+
+  .special-modal-button {
+    right: 4%;
+  }
+}
+
+@media all and (max-width: 1200px) {
+  .logout-button {
+    right: 6%;
+  }
+
+  .special-modal-button {
+    right: 6%;
+  }
+}
+
+@media all and (max-width: 1100px) {
+  .logout-button {
+    right: 4%;
+  }
+
+  .special-modal-button {
+    right: 4%;
+  }
+}
+
+@media all and (max-width: 1000px) {
+  .logout-text {
+    display: none;
+  }
+
+  .menu-text {
+    display: none;
+  }
+
+  .logout-button {
+    width: 40px;
+    right: 10px;
+  }
+
+  .special-modal-button {
+    width: 46px;
+    right: 10px;
+  }
+}
+
+@media all and (max-width: 650px) {
+  .modal-content {
+    margin-top: 70px;
+  }
+
+  .back-to-tasks {
+    width: 100%;
+  }
 }
