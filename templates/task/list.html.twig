@@ -2,13 +2,10 @@
 
 {% block title %}Liste des tâches{% endblock %}
 
-{# {% block header_img %}<img class="slide-image" src="{{ asset('img/todolist_content.jpg') }}" alt="todo list" title="todo list">{% endblock %} #}
-
 {% block header_img %}{% endblock %}
 
 {% block body %}
 
-<!-- AJOUTÉ POUR SWITCHER ENTRE L'AFFICHAGE DE TOUTES LES TÂCHES ET L'AFFICHAGE DES TÂCHES TERMINÉES -->
 {% if 'task_list' == app.request.attributes.get('_route') %}
     
     <div class="center-box">
@@ -37,9 +34,9 @@
 
     <div class="row">
 
-        {% for task in tasks %}
+        {% for task in tasks|slice(start, limit) %}
 
-        <div class="col-sm-4 col-lg-4 col-md-4">
+        <div class="col-sm-12 col-lg-4 col-md-12">
 
             <div class="thumbnail special-thumbnail">
 
@@ -63,35 +60,31 @@
                     <div class="regular-spacer"></div>
 
                     <h5>
-                        <a href="{{ path('task_edit', {'id' : task.id }) }}">
+                        <a class="special-task-title" href="{{ path('task_edit', {'id' : task.id }) }}">
                         {{ task.title|upper|raw }}
                         </a>
                     </h5>
 
-                    <!-- AJOUTÉ POUR IDENTIFIER L'AUTEUR DE LA TÂCHE -->
-                    <!-- AJOUTÉES : DATES DE CRÉATION ET DE MISE À JOUR -->
-                    {# {% if task.user.username != 'Anonyme' %} #}
-                    {# {% if task.usertodo.id != 2 %} #}
-                    {% if (task.usertodo.id != 2) and (task.freshDate is null) %}
+                    {% if (task.usertodo.role != 'ROLE_ANONYMOUS') and (task.freshDate is null) %}
 
                         <p class="task-infos">
-                        PAR {{ task.usertodo.username|upper|raw }} &bull; LE {{ task.createdAt|date('d/m/Y')|raw }}
+                        PAR {{ task.usertodo.username|upper|raw }} &bull; LE {{ task.createdAt|date('d/m/Y H:i')|raw }}
                         </p>
 
                     {% endif %}
 
-                    {% if (task.usertodo.id != 2) and (task.freshDate is not null) %}
+                    {% if (task.usertodo.role != 'ROLE_ANONYMOUS') and (task.freshDate is not null) %}
 
                         <p class="task-infos">
-                        PAR {{ task.usertodo.username|upper|raw }} &bull; MIS À JOUR LE {{ task.freshDate|date('d/m/Y')|raw }}
+                        PAR {{ task.usertodo.username|upper|raw }} &bull; MIS À JOUR LE {{ task.freshDate|date('d/m/Y H:i')|raw }}
                         </p>
 
                     {% endif %}
 
-                    {% if (task.usertodo.id == 2) and (task.freshDate is not null) %}
+                    {% if (task.usertodo.role == 'ROLE_ANONYMOUS') and (task.freshDate is not null) %}
 
                         <p class="task-infos">
-                        MIS À JOUR LE {{ task.freshDate|date('d/m/Y')|raw }}
+                        MIS À JOUR LE {{ task.freshDate|date('d/m/Y H:i')|raw }}
                         </p>
 
                     {% endif %}
@@ -116,22 +109,15 @@
 
                     </form>
 
-                    <!-- AJOUTÉ POUR N'AUTORISER QUE LES AUTEURS DES TÂCHES À SUPPRIMER LEURS TÂCHES OU POUR N'AUTORISER QUE LES UTILISATEURS AYANT LE ROLE ADMIN -->
-                    {# {% if app.user and (app.user.role == 'ROLE_ADMIN' or app.user == task.user) %} #}
-                    {# {% if is_granted('ROLE_ADMIN') or app.user == task.user %} #}
                     {% if is_granted('ROLE_ADMIN') or app.user.id == task.usertodo.id %}
 
                         <form action="{{ path('task_delete', {'id' : task.id }) }}">
 
-                            <button class="btn btn-danger btn-sm" onclick="return(confirm('Validez-vous ce choix ?'));">Supprimer</button>
+                            <button class="btn btn-danger btn-sm" onclick="return(confirm('Validez-vous ce choix ?'));"><span class="glyphicon glyphicon-trash"></span></button>
 
                         </form>
 
                     {% endif %}
-
-                    {# <form action="{{ path('task_delete', {'id' : task.id }) }}">
-                        <button class="btn btn-danger btn-sm pull-right">Supprimer</button>
-                    </form> #}
 
                     <div class="regular-spacer"></div>
 
@@ -152,5 +138,43 @@
         {% endfor %}
 
     </div>
+
+    <div id="paging_links" class="center-box"> 
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+
+<script src="{{ asset('module/paginate.js') }}"></script>
+
+{% if 'task_list' == app.request.attributes.get('_route') %}
+        
+    <script>
+
+        firstLink({{ tasks|length }}, '{{ path('task_list') }}');
+
+        var nbr_links = Math.ceil({{ tasks|length }} / 10);
+
+        linksLoop(nbr_links, '{{ path('task_list') }}');
+
+    </script>
+
+{% endif %}
+
+{% if 'task_done' == app.request.attributes.get('_route') %}
+
+    <script>
+
+        firstLink({{ tasks|length }}, '{{ path('task_done') }}');
+
+        var nbr_links = Math.ceil({{ tasks|length }} / 10);
+
+        linksLoop(nbr_links, '{{ path('task_done') }}');
+
+    </script>
+
+{% endif %}
 
 {% endblock %}

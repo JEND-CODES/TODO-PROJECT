@@ -7,31 +7,31 @@ body {
 }
 
 .octicon {
-  margin-right: .25em;
+  margin-right: 0.25em;
 }
 
-.table-bordered>thead>tr>td {
+.table-borderless th,
+.table-borderless td {
+  border: 0;
+}
+
+.table-bordered > thead > tr > td {
   border-bottom-width: 1px;
 }
 
-.table tbody>tr>td,
-.table thead>tr>td {
+.table tbody > tr > td,
+.table thead > tr > td {
   padding-top: 3px;
   padding-bottom: 3px;
 }
 
-.table-condensed tbody>tr>td {
+.table-condensed tbody > tr > td {
   padding-top: 0;
   padding-bottom: 0;
 }
 
 .table .progress {
   margin-bottom: inherit;
-}
-
-.table-borderless th,
-.table-borderless td {
-  border: 0 !important;
 }
 
 .table tbody tr.covered-by-large-tests,
@@ -74,7 +74,9 @@ td.big {
   width: 117px;
 }
 
-td.small {}
+td.small {
+  white-space: pre;
+}
 
 td.codeLine {
   font-family: "Source Code Pro", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;

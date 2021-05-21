@@ -6,8 +6,6 @@ use App\Entity\Tasktodo;
 use App\Form\TasktodoType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-// https://symfony.com/doc/current/form/unit_testing.html
-
 class TasktodoTypeTest extends TypeTestCase
 {
     

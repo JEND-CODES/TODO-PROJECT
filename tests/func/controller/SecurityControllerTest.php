@@ -17,7 +17,6 @@ class SecurityControllerTest extends WebTestCase
         $usertodoRepo = static::$container->get(UsertodoRepository::class);
 
         $testManager = $usertodoRepo->findOneByUsername('manager');
-        // $testUser = $usertodoRepo->findOneByUsername('billy');
 
         $client->loginUser($testManager);
 
@@ -35,11 +34,11 @@ class SecurityControllerTest extends WebTestCase
 
         $this->assertSelectorExists('a', 'Se déconnecter');
 
-        $this->assertSelectorExists('a', 'Créer une nouvelle tâche');
+        $this->assertSelectorExists('a', 'Créer une tâche');
 
-        $this->assertSelectorExists('a', 'Consulter la liste des tâches à faire');
+        $this->assertSelectorExists('a', 'Liste des tâches');
 
-        $this->assertSelectorExists('a', 'Consulter la liste des tâches terminées');
+        $this->assertSelectorExists('a', 'Tâches terminées');
 
     }
 
@@ -52,7 +51,6 @@ class SecurityControllerTest extends WebTestCase
         $usertodoRepo = static::$container->get(UsertodoRepository::class);
 
         $testManager = $usertodoRepo->findOneByUsername('manager');
-        // $testUser = $usertodoRepo->findOneByUsername('billy');
 
         $client->loginUser($testManager);
 
@@ -94,7 +92,7 @@ class SecurityControllerTest extends WebTestCase
 
         $this->assertSelectorExists('a', 'Se déconnecter');
 
-    }
+    } 
     
     public function testLogout()
     {

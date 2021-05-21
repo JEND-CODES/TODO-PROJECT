@@ -32,7 +32,7 @@ php bin/console doctrine:fixtures:load
 
 • Consultez la documentation technique sur [l'implémentation de l'authentification](https://github.com/JEND-CODES/TODO-PROJECT)
 
-• Consultez le dernier [rapport de couverture](https://github.com/JEND-CODES/TODO-PROJECT/tree/main/tests-coverage) des tests unitaires et fonctionnels
+• Consultez le dernier [rapport de couverture]() des tests unitaires et fonctionnels
  
 • Consultez le [rapport d'audit](https://github.com/JEND-CODES/TODO-PROJECT) de qualité de code et de performance
 

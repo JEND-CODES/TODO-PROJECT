@@ -14,7 +14,7 @@
 
 <div class="center-box">     
 
-    <form action="{{ path('login_check') }}" method="post">
+    <form action="{{ path('login') }}" method="post">
 
         <input placeholder="NOM" type="text" id="username" name="_username" value="{{ last_username }}" required />
 
@@ -22,9 +22,8 @@
 
         <div class="regular-spacer"></div>
 
-        <button class="btn btn-success" type="submit">
-            Se connecter&nbsp;&nbsp;
-            <span class="glyphicon glyphicon-log-in"></span>
+        <button class="btn btn-special-success" type="submit">
+            Se connecter
         </button>
 
     </form>

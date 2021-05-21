@@ -12,8 +12,6 @@
 
         <meta name="author" content="TODO AND CO">
 
-        {# <title>TO DO LIST APP</title> #}
-        {# LE TITRE N'ÉTAIT PAS INDIQUÉ DANS UN BLOCK TITLE DANS LE PROJET DE DÉPART #}
         <title>{% block title %}TO DO LIST APP{% endblock %}</title>
 
         {% block stylesheets %}
@@ -21,19 +19,6 @@
         {{ encore_entry_link_tags('app') }}
 
         {% endblock %}
-        
-        <!-- ??? 
-        QU'EST-CE QUE CES ANNOTATIONS SIGNIFIENT ?
-        - CF. https://github.com/aFarkas/html5shiv
-        - CF. https://github.com/scottjehl/Respond
-        -->
-
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
 
     </head>
 
@@ -45,7 +30,7 @@
 
                 <div class="navbar-header">
 
-                    <img src="{{ asset('build/images/Logo_OpenClassrooms.png') }}" alt="OpenClassrooms" title="OpenClassrooms"/>
+                    <img class="openclass-logo" src="{{ asset('build/images/Logo_OpenClassrooms.png') }}" alt="OpenClassrooms" title="OpenClassrooms"/>
 
                     <a class="navbar-brand main-logo" href="/">TO DO LIST APP</a>
 
@@ -55,18 +40,12 @@
 
         </nav>
 
-        <!-- Page Content -->
         <div class="container">
 
             <div class="row">
 
-                <!-- CONDITION AJOUTÉE POUR AFFICHER LE BOUTON SEULEMENT POUR UN UTILISATEUR AVEC LE ROLE ADMIN -->
-                {# {% if app.user and app.user.role == 'ROLE_ADMIN' %} #}
                 {% if app.user and is_granted('ROLE_ADMIN') %}
-                    {# AJOUT DE GLYPHICONS POUR AMÉLIORER LA LISIBILITÉ DES BOUTONS #}
-                    
-                    <!-- AJOUT D'UN MODAL -->
-                    <!-- Button trigger modal -->
+
                     <button type="button" class="btn btn-light special-modal-button" data-bs-toggle="modal" data-bs-target="#exampleModal">
 
                         <span class="menu-text">MENU&nbsp;&nbsp;</span>
@@ -75,20 +54,25 @@
 
                     </button>
 
-                    <!-- Modal -->
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
                         <div class="modal-dialog">
 
                             <div class="modal-content">
 
-                                <div class="modal-header">
+                                <div class="modal-header special-modal-header">
 
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
                                 </div>
 
-                                <div class="modal-body center-box">
+                                <div class="modal-body center-box special-modal-body">
+
+                                    <a href="{{ path('task_create') }}" class="dropdown-item" href="#">Créer une tâche</a>
+
+                                    <a href="{{ path('task_list') }}" class="dropdown-item" href="#">Liste des tâches</a>
+
+                                    <a href="{{ path('task_done') }}" class="dropdown-item" href="#">Tâches terminées</a>
 
                                     <a href="{{ path('user_create') }}" class="dropdown-item" href="#">Créer un utilisateur</a>
 
@@ -113,7 +97,7 @@
 
                 {% if app.user and app.user.role == 'ROLE_USER' %}
 
-                <a href="{{ path('logout') }}" class="btn btn-danger logout-button">
+                <a href="{{ path('logout') }}" class="btn btn-light logout-button">
 
                     <span class="logout-text">Se déconnecter&nbsp;&nbsp;</span>
 
@@ -141,7 +125,7 @@
 
                     {% for flash_message in app.session.flashBag.get('success') %}
 
-                        <div class="alert alert-success" role="alert">
+                        <div class="alert alert-success center-box" role="alert">
 
                             <strong>Superbe !</strong> {{ flash_message }}
 
@@ -151,7 +135,7 @@
 
                     {% for flash_message in app.session.flashBag.get('error') %}
 
-                        <div class="alert alert-danger" role="alert">
+                        <div class="alert alert-danger center-box" role="alert">
 
                             <strong>Oops !</strong> {{ flash_message }}
 

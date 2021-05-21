@@ -1,9 +1,5 @@
 <?php
 
-// CRÉER UN DOSSIER ENTIER DE TOUS LES TESTS : " php bin/phpunit --coverage-html tests-coverage "
-
-// LANCER LES FIXTURES ! " php bin/console doctrine:fixtures:load "
-
 namespace Tests\Func\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;

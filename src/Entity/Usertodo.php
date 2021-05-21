@@ -32,6 +32,12 @@ class Usertodo implements UserInterface
     /**
      * @ORM\Column(type="string", length=25, unique=true)
      * @Assert\NotBlank(message="Vous devez saisir un nom d'utilisateur.")
+     * @Assert\Length(
+     *      min=4, 
+     *      max=50, 
+     *      minMessage="Nom trop court", 
+     *      maxMessage = "Nom trop long"
+     * )
      */
     private $username;
 
@@ -39,7 +45,7 @@ class Usertodo implements UserInterface
      * @ORM\Column(type="string", length=64)
      * @Assert\Length(
      *      min=8,
-     *      minMessage="Votre mot de passe doit comporter au moins 8 caractères"
+     *      minMessage="Le mot de passe doit comporter au moins 8 caractères"
      * )
      */
     private $password;

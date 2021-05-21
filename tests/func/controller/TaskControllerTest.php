@@ -143,7 +143,6 @@ class TaskControllerTest extends WebTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        // $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
     }
 
     public function testDeleteTaskAction()

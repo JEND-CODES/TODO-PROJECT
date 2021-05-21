@@ -2,33 +2,102 @@
 
 namespace App\Controller;
 
-use App\Entity\Usertodo;
-use App\Form\UsertodoType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Security\Core\Security;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\Entity\Usertodo;
+use App\Repository\UsertodoRepository;
+use App\Form\UsertodoType;
+use App\Handler\PagingHandler;
+use App\Security\Voter\UserVoter;
 
 class UserController extends AbstractController
 {
+    /**
+     * @var Security
+     */
+    private $security;
 
     /**
-     * @Route("/users", name="user_list")
+     * @var EntityManagerInterface
      */
-    public function listAction()
-    {
+    private $manager;
 
-        return $this->render('user/list.html.twig', ['users' => $this->getDoctrine()->getRepository('App:Usertodo')->findAll()]);
+    /**
+	 * @var AuthorizationCheckerInterface
+	 */
+	private $authorization;
+
+    /**
+     * @var UserPasswordEncoderInterface
+     */
+    private $encoder;
+
+    /**
+     * @var UsertodoRepository
+     */
+    private $usertodoRepo;
+
+    /**
+     * @var PagingHandler
+     */
+    private $pagingHandler;
+
+    public function __construct(
+        Security $security, 
+        EntityManagerInterface $manager,
+        AuthorizationCheckerInterface $authorization,
+        UserPasswordEncoderInterface $encoder,
+        UsertodoRepository $usertodoRepo, 
+        PagingHandler $pagingHandler
+        )
+    {
+        $this->security = $security;
+        $this->manager = $manager;
+        $this->authorization = $authorization;
+        $this->encoder = $encoder;
+        $this->usertodoRepo = $usertodoRepo;
+        $this->pagingHandler = $pagingHandler;
     }
 
     /**
-     * @Route("/users/create", name="user_create")
+     * @Route("/users", name="user_list", methods={"GET"})
+     * @return Response
      */
-    public function createAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    public function listAction(Request $request): Response
     {
+        $pageValues = $this->pagingHandler->handle($request);
 
+        if (!$pageValues[0] || !$pageValues[1]) {
+            $start = 0;
+            $limit = 10;
+        } else {
+            $start = (int) strip_tags($pageValues[0]);
+            $limit = (int) strip_tags($pageValues[1]);
+        }
+
+        $users = $this->usertodoRepo->findBy(array(), array('id' => 'DESC'));
+
+        return $this->render('user/list.html.twig', [
+            'limit' => $limit,
+            'start' => $start,
+            'users' => $users
+        ]);
+    }
+
+    /**
+     * @Route("/users/create", name="user_create", methods={"GET","POST"})
+     * @return Response
+     */
+    public function createAction(Request $request): Response
+    {
         $user = new Usertodo();
 
         $form = $this->createForm(UsertodoType::class, $user);
@@ -37,15 +106,13 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $em = $this->getDoctrine()->getManager();
-
-            $password = $passwordEncoder->encodePassword($user, $user->getPassword());
+            $password = $this->encoder->encodePassword($user, $user->getPassword());
 
             $user->setPassword($password);
 
-            $em->persist($user);
+            $this->manager->persist($user);
 
-            $em->flush();
+            $this->manager->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été ajouté.");
 
@@ -56,17 +123,19 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/users/{id}/edit", name="user_edit")
+     * @Route("/users/{id}/edit", name="user_edit", requirements={"id": "\d+"}, methods={"GET","POST"})
+     * @return Response
      */
-    public function editAction(Usertodo $user, Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function editAction(Usertodo $user, Request $request): Response
     {
 
-        // AJOUTÉ POUR EMPÊCHER UN ADMINISTRATEUR DE MODIFIER SON PROPRE COMPTE
-        if ($this->getUser()->getId() === $user->getId()) 
-        {
-            // https://symfony.com/doc/current/controller.html#managing-errors-and-404-pages
-            throw $this->createNotFoundException('Access Denied.');
-        }
+        if (!$this->authorization->isGranted(UserVoter::UPDATE, $user)) {
+
+			$this->addFlash('error', 'Vous ne pouvez pas modifier ce compte !');
+
+			return $this->redirectToRoute('user_list');
+
+		}
         
         $form = $this->createForm(UsertodoType::class, $user);
 
@@ -74,18 +143,15 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $em = $this->getDoctrine()->getManager();
-
-            $password = $passwordEncoder->encodePassword($user, $user->getPassword());
+            $password = $this->encoder->encodePassword($user, $user->getPassword());
 
             $user->setPassword($password);
 
-            // AJOUTÉ POUR LA DATE DE MISE À JOUR
             $user->setFreshDate(new \Datetime());
 
-            $em->persist($user);
+            $this->manager->persist($user);
 
-            $em->flush();
+            $this->manager->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été modifié");
 
@@ -96,23 +162,23 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/users/{id}/delete", name="user_delete")
+     * @Route("/users/{id}/delete", name="user_delete", requirements={"id": "\d+"}, methods={"GET", "DELETE"})
+     * @return RedirectResponse
      */
-    public function deleteAction(Usertodo $user): Response
+    public function deleteAction(Usertodo $user): RedirectResponse
     {
-        // AJOUTÉ POUR EMPÊCHER UN ADMINISTRATEUR DE SUPPRIMER SON PROPRE COMPTE
-        if ($this->getUser()->getId() === $user->getId()) 
-        {
-            // https://symfony.com/doc/current/controller.html#managing-errors-and-404-pages
-            throw $this->createNotFoundException('Access Denied.');
-        }
 
-        // AJOUTÉ POUR SUPPRIMER DES UTILISATEURS 
-        $em = $this->getDoctrine()->getManager();
-        
-        $em->remove($user);
+        if (!$this->authorization->isGranted(UserVoter::DELETE, $user)) {
 
-        $em->flush();
+			$this->addFlash('error', 'Vous ne pouvez pas supprimer ce compte !');
+
+			return $this->redirectToRoute('user_list');
+
+		}
+
+        $this->manager->remove($user);
+            
+        $this->manager->flush();
 
         $this->addFlash('success', 'L\'utilisateur a bien été supprimé.');
 

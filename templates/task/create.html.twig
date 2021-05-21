@@ -1,6 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{# LES TITRES DES PAGES N'ÉTAIENT PAS INDIQUÉS DANS LE PROJET DE DÉPART #}
 {% block title %}Créer une nouvelle tâche{% endblock %}
 
 {% block header_title %}
@@ -13,7 +12,7 @@
 
 {% block body %}
 
-    <div class="row center-box">
+    <div class="row center-box special-editor">
 
         {{ form_start(form, {'action' : path('task_create')}) }}
 

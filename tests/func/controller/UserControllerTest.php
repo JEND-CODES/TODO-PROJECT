@@ -125,7 +125,7 @@ class UserControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/users/3/edit');
 
-        $this->assertSame(404, $client->getResponse()->getStatusCode());
+        $this->assertSame(302, $client->getResponse()->getStatusCode());
 
     }
 
@@ -150,23 +150,5 @@ class UserControllerTest extends WebTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
     }
-
-   /*  public function testDeleteActionWithDeniedAccess()
-    {
-        $client = static::createClient();
-
-        $container = $client->getContainer();
-
-        $usertodoRepo = static::$container->get(UsertodoRepository::class);
-
-        $testAdmin = $usertodoRepo->findOneByUsername('paolo');
-
-        $client->loginUser($testAdmin);
-
-        $crawler = $client->request('GET', '/users/3/delete');
-
-        $this->assertSame(404, $client->getResponse()->getStatusCode());
-
-    } */
     
 }
