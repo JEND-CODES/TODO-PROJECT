@@ -2,11 +2,11 @@ security:
     encoders:
         App\Entity\Usertodo:
             algorithm: bcrypt
-
+            
     providers:
         in_memory: { memory: ~ }
 
-        doctrine:
+        in_database:
             entity:
                 class: App\Entity\Usertodo
                 property: username
@@ -15,15 +15,19 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
+            
         main:
             anonymous: true
-
             lazy: true
 
             pattern: ^/
 
-            provider: doctrine
+            provider: in_database
+
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 604800
+                path:     /
 
             form_login:
                 login_path: login

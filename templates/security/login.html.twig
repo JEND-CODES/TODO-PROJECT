@@ -4,7 +4,7 @@
 
     {% if error %}
 
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-danger login-alert-error" role="alert">
 
             {{ error.messageKey|trans(error.messageData, 'security') }}
 
@@ -19,6 +19,11 @@
         <input placeholder="NOM" type="text" id="username" name="_username" value="{{ last_username }}" required />
 
         <input placeholder="MOT DE PASSE" type="password" id="password" name="_password" required />
+
+        <div class="regular-spacer"></div>
+
+        <input type="checkbox" id="remember_me" name="_remember_me" checked/>
+        <label class="remember-check-box" for="remember_me">Se souvenir de moi</label>
 
         <div class="regular-spacer"></div>
 
