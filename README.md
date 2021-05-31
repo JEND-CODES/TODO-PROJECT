@@ -40,7 +40,7 @@
 
 • Implémentation de [l'authentification](https://github.com/JEND-CODES/TODO-PROJECT/blob/main/documentation/Impl%C3%A9mentation%20Authentification%20P8%20V2.pdf)
 
-• Rapport d'audit de qualité de code et de [performances](https://github.com/JEND-CODES/TODO-PROJECT/tree/main/documentation)
+• Rapport d'audit de qualité de code et de [performances](https://github.com/JEND-CODES/TODO-PROJECT/blob/main/documentation/Audit%20P8%20V2.pdf)
 
 ## DÉMO => http://todo.planetcode.fr
 
