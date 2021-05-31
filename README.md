@@ -73,11 +73,3 @@
 ## DEBUG ROUTER
 
 ![TODO-PROJECT](https://raw.githubusercontent.com/JEND-CODES/TODO-PROJECT/main/public/captures/P8%20Debug%20Router.png)
-
-## RÉDUCTION DETTE TECHNIQUE
-
-• Pagination pour l'affichage des tâches et du dashboard utilisateurs
-
-• Utilisation de Webpack Encore pour améliorer le chargement des dépendances CSS & JS
-
-• Système de cookies "remember_me" (security.yaml)
