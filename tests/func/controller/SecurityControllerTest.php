@@ -36,7 +36,7 @@ class SecurityControllerTest extends WebTestCase
 
         $this->assertSelectorExists('a', 'Créer une tâche');
 
-        $this->assertSelectorExists('a', 'Liste des tâches');
+        $this->assertSelectorExists('a', 'Tâches à réaliser');
 
         $this->assertSelectorExists('a', 'Tâches terminées');
 

@@ -66,6 +66,8 @@
 
 ## CODE COVERAGE
 
+• Rapport de [couverture](http://symfony1.planetcode.fr/tests-coverage/index.html)
+
 ![TODO-PROJECT](https://raw.githubusercontent.com/JEND-CODES/TODO-PROJECT/main/public/captures/P8%20PhpUnit%20Tests%20results.png)
 
 ![TODO-PROJECT](https://raw.githubusercontent.com/JEND-CODES/TODO-PROJECT/main/assets/images/Coverage_results_P8_V4.JPG)

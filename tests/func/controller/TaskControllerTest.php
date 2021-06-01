@@ -51,6 +51,73 @@ class TaskControllerTest extends WebTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode()); 
     }
 
+    public function testTasksListPaginated()
+    {
+
+        $client = static::createClient();
+
+        $container = $client->getContainer();
+
+        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+
+        $testManager = $usertodoRepo->findOneByUsername('manager');
+
+        $client->loginUser($testManager);
+
+        $client->request('GET', '/tasks?start=10&limit=10');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $tasktodoRepo = static::$container->get(TasktodoRepository::class);
+
+        $testTask = $tasktodoRepo->findOneByIsDone(false);
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode()); 
+    }
+
+    public function testTasksListDonePaginated()
+    {
+
+        $client = static::createClient();
+
+        $container = $client->getContainer();
+
+        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+
+        $testManager = $usertodoRepo->findOneByUsername('manager');
+
+        $client->loginUser($testManager);
+
+        $client->request('GET', '/tasks/done?start=1&limit=5');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $tasktodoRepo = static::$container->get(TasktodoRepository::class);
+
+        $testTask = $tasktodoRepo->findOneByIsDone(true);
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode()); 
+    }
+
+    public function testErrorForTooManyTasksRequested()
+    {
+
+        $client = static::createClient();
+
+        $container = $client->getContainer();
+
+        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+
+        $testManager = $usertodoRepo->findOneByUsername('manager');
+
+        $client->loginUser($testManager);
+
+        $client->request('GET', '/tasks/done?start=1&limit=101');
+
+        $this->assertSame(500, $client->getResponse()->getStatusCode());
+
+    }
+
     public function testCreateAction()
     {
         $client = static::createClient();
@@ -145,7 +212,7 @@ class TaskControllerTest extends WebTestCase
 
     }
 
-    public function testDeleteTaskAction()
+    public function testDeleteTaskActionBySimpleUser()
     {
         $client = static::createClient();
 
@@ -175,11 +242,11 @@ class TaskControllerTest extends WebTestCase
 
         $usertodoRepo = static::$container->get(UsertodoRepository::class);
 
-        $testManager = $usertodoRepo->findOneByUsername('nicolas');
+        $testManager = $usertodoRepo->findOneByUsername('manager');
 
         $client->loginUser($testManager);
 
-        $crawler = $client->request('GET', '/tasks/9/delete');
+        $crawler = $client->request('GET', '/tasks/2/delete');
 
         $this->assertSame(302, $client->getResponse()->getStatusCode());
 

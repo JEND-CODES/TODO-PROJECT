@@ -3,7 +3,6 @@
 namespace Tests\Func\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-// use App\Repository\TasktodoRepository;
 use App\Repository\UsertodoRepository;
 
 class UserControllerTest extends WebTestCase
@@ -31,6 +30,47 @@ class UserControllerTest extends WebTestCase
 
     }
 
+    public function testUsersListPaginated()
+    {
+
+        $client = static::createClient();
+
+        $container = $client->getContainer();
+
+        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+
+        $testManager = $usertodoRepo->findOneByUsername('manager');
+
+        $client->loginUser($testManager);
+
+        $client->request('GET', '/users?start=10&limit=10');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $tasktodoRepo = static::$container->get(UsertodoRepository::class);
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode()); 
+    }
+
+    public function testErrorForTooManyUsersRequested()
+    {
+
+        $client = static::createClient();
+
+        $container = $client->getContainer();
+
+        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+
+        $testManager = $usertodoRepo->findOneByUsername('manager');
+
+        $client->loginUser($testManager);
+
+        $client->request('GET', '/users?start=1&limit=101');
+
+        $this->assertSame(500, $client->getResponse()->getStatusCode());
+
+    }
+
     public function testCreateAction()
     {
         $client = static::createClient();
@@ -44,14 +84,12 @@ class UserControllerTest extends WebTestCase
         $client->loginUser($testManager);
 
         $crawler = $client->request('GET', '/users/create');
-
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
         
         $form = $crawler->selectButton('Ajouter')->form();
 
-        $form['usertodo[username]'] = 'michel';
+        $form['usertodo[username]'] = 'danielle';
 
-        $form['usertodo[email]'] = 'michel@test.com';
+        $form['usertodo[email]'] = 'danielle@test.com';
 
         $form['usertodo[password][first]'] = 'testtest';
 
@@ -148,6 +186,30 @@ class UserControllerTest extends WebTestCase
         $crawler = $client->followRedirect();
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+    }
+
+   public function testDeleteActionWithDeniedAccess()
+    {
+        $client = static::createClient();
+
+        $container = $client->getContainer();
+
+        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+
+        $testManager = $usertodoRepo->findOneByUsername('manager');
+
+        $client->loginUser($testManager);
+
+        $crawler = $client->request('GET', '/users/1/delete');
+
+        $this->assertSame(302, $client->getResponse()->getStatusCode());
+
+        $crawler = $client->followRedirect();
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $this->assertSame(1, $crawler->filter('div.alert.alert-danger')->count());
 
     }
     
