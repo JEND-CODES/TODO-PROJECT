@@ -8,19 +8,25 @@ use App\Repository\UsertodoRepository;
 class SecurityControllerTest extends WebTestCase
 {
 
+    private $client = null;
+
+    public function setUp(): void
+    {
+        $this->client = static::createClient();
+    }
+
+    /**
+     * TEST DE CONNEXION ET INSPECTIONS DE LA PAGE D'ACCUEIL
+     */
     public function testLoginHome()
     {
-        $client = static::createClient();
-
-        $container = $client->getContainer();
-
-        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
 
         $testManager = $usertodoRepo->findOneByUsername('manager');
 
-        $client->loginUser($testManager);
+        $this->client->loginUser($testManager);
 
-        $crawler = $client->request('GET', '/');
+        $crawler = $this->client->request('GET', '/');
         
         $this->assertResponseIsSuccessful();
 
@@ -42,19 +48,18 @@ class SecurityControllerTest extends WebTestCase
 
     }
 
+    /**
+     * TEST D'ACCÈS À LA PAGE DE GESTION DES UTILISATEURS PAR LE MANAGER
+     */
     public function testLoginManager()
     {
-        $client = static::createClient();
-
-        $container = $client->getContainer();
-
-        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
 
         $testManager = $usertodoRepo->findOneByUsername('manager');
 
-        $client->loginUser($testManager);
+        $this->client->loginUser($testManager);
 
-        $crawler = $client->request('GET', '/users');
+        $crawler = $this->client->request('GET', '/users');
         
         $this->assertResponseIsSuccessful();
 
@@ -62,13 +67,14 @@ class SecurityControllerTest extends WebTestCase
 
     }
     
+    /**
+     * TEST DU FORMULAIRE DE CONNEXION
+     */
     public function testLogin()
     {
-        $client = static::createClient();
+        $crawler = $this->client->request('GET', '/login');
 
-        $crawler = $client->request('GET', '/login');
-
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
         $this->assertSame(1, $crawler->filter('input[name="_username"]')->count());
 
@@ -82,11 +88,11 @@ class SecurityControllerTest extends WebTestCase
 
         $form['_password'] = 'testtest';
         
-        $client->submit($form); 
+        $this->client->submit($form); 
 
-        $crawler = $client->followRedirect();
+        $crawler = $this->client->followRedirect();
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
         $this->assertSame("TO DO LIST APP", $crawler->filter('a')->text());
 
@@ -94,25 +100,24 @@ class SecurityControllerTest extends WebTestCase
 
     } 
     
+    /**
+     * TEST DE DÉCONNEXION
+     */
     public function testLogout()
     {
-        $client = static::createClient();
-
-        $container = $client->getContainer();
-
-        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
 
         $testManager = $usertodoRepo->findOneByUsername('manager');
 
-        $client->loginUser($testManager);
+        $this->client->loginUser($testManager);
 
-        $crawler = $client->request('GET', '/');
+        $crawler = $this->client->request('GET', '/');
         
         $this->assertResponseIsSuccessful();
 
         $this->assertSame(1, $crawler->filter('html:contains("Bienvenue sur Todo List, l\'application vous permettant de gérer l\'ensemble de vos tâches sans effort !")')->count());
 
-        $crawler = $client->request('GET', '/logout');
+        $crawler = $this->client->request('GET', '/logout');
 
         $this->assertResponseRedirects();
 

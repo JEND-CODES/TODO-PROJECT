@@ -9,130 +9,158 @@ use App\Repository\UsertodoRepository;
 class TaskControllerTest extends WebTestCase
 {
 
+    private $client = null;
+
+    public function setUp(): void
+    {
+        $this->client = static::createClient();
+    }
+
+    /**
+     * TEST D'ACCÈS À LA LISTE DES TÂCHES À RÉALISER
+     */
     public function testListAction()
     {
-
-        $client = static::createClient();
-
-        $container = $client->getContainer();
-
-        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
 
         $testManager = $usertodoRepo->findOneByUsername('manager');
 
-        $client->loginUser($testManager);
+        $this->client->loginUser($testManager);
 
-        $client->request('GET', '/tasks');
+        $this->client->request('GET', '/tasks');
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
+
+        $this->assertSelectorNotExists('.glyphicon-ok');
     }
 
+    /**
+     * TESTS D'ACCÈS AUX ROUTES PROTÉGÉES DE GESTIONS DES TÂCHES
+     */
+    public function testProtectedPathTasksAccess()
+    {
+        $paths = [
+            ['GET', '/tasks'],
+            ['GET', '/tasks/done'],
+            ['GET', '/tasks/6/edit']
+        ];
+
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
+
+        $testManager = $usertodoRepo->findOneByUsername('manager');
+
+        $this->client->loginUser($testManager);
+
+        foreach ($paths as $path) {
+
+            $this->client->request($path[0], $path[1]);
+
+            $this->assertSame(200, $this->client->getResponse()->getStatusCode());
+
+        }
+
+    }
+
+    /**
+     * TEST D'ACCÈS À LA LISTE DES TÂCHES TERMINÉES
+     */
     public function testListDone()
     {
-
-        $client = static::createClient();
-
-        $container = $client->getContainer();
-
-        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
 
         $testManager = $usertodoRepo->findOneByUsername('manager');
 
-        $client->loginUser($testManager);
+        $this->client->loginUser($testManager);
 
-        $client->request('GET', '/tasks/done');
+        $this->client->request('GET', '/tasks/done');
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
-        $tasktodoRepo = static::$container->get(TasktodoRepository::class);
+        $tasktodoRepo = self::$container->get(TasktodoRepository::class);
 
-        $testTask = $tasktodoRepo->findOneByIsDone(true);
+        $taskDone = $tasktodoRepo->findOneByIsDone(true);
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode()); 
+        $this->assertNotNull($taskDone);
+
+        $this->assertSelectorExists('.glyphicon-ok');
+
     }
 
+    /**
+     * TEST D'ACCÈS À LA LISTE PAGINÉE DES TÂCHES À RÉALISER
+     */
     public function testTasksListPaginated()
     {
-
-        $client = static::createClient();
-
-        $container = $client->getContainer();
-
-        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
 
         $testManager = $usertodoRepo->findOneByUsername('manager');
 
-        $client->loginUser($testManager);
+        $this->client->loginUser($testManager);
 
-        $client->request('GET', '/tasks?start=10&limit=10');
+        $this->client->request('GET', '/tasks?start=10&limit=10');
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
-        $tasktodoRepo = static::$container->get(TasktodoRepository::class);
+        $this->assertSelectorNotExists('.glyphicon-ok');
 
-        $testTask = $tasktodoRepo->findOneByIsDone(false);
-
-        $this->assertSame(200, $client->getResponse()->getStatusCode()); 
     }
 
+    /**
+     * TEST D'ACCÈS À LA LISTE PAGINÉE DES TÂCHES TERMINÉES
+     */
     public function testTasksListDonePaginated()
     {
-
-        $client = static::createClient();
-
-        $container = $client->getContainer();
-
-        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
 
         $testManager = $usertodoRepo->findOneByUsername('manager');
 
-        $client->loginUser($testManager);
+        $this->client->loginUser($testManager);
 
-        $client->request('GET', '/tasks/done?start=1&limit=5');
+        $this->client->request('GET', '/tasks/done?start=1&limit=5');
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
-        $tasktodoRepo = static::$container->get(TasktodoRepository::class);
+        $tasktodoRepo = self::$container->get(TasktodoRepository::class);
 
-        $testTask = $tasktodoRepo->findOneByIsDone(true);
+        $taskNotDone = $tasktodoRepo->findOneByIsDone(true);
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode()); 
+        $this->assertNotNull($taskNotDone);
+
+        $this->assertSelectorExists('.glyphicon-ok');
+        
     }
 
+    /**
+     * TEST D'ERREUR GÉNÉRÉE LIÉE À LA PAGINATION (TROP D'ITEMS DEMANDÉS)
+     */
     public function testErrorForTooManyTasksRequested()
     {
-
-        $client = static::createClient();
-
-        $container = $client->getContainer();
-
-        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
 
         $testManager = $usertodoRepo->findOneByUsername('manager');
 
-        $client->loginUser($testManager);
+        $this->client->loginUser($testManager);
 
-        $client->request('GET', '/tasks/done?start=1&limit=101');
+        $this->client->request('GET', '/tasks/done?start=1&limit=101');
 
-        $this->assertSame(500, $client->getResponse()->getStatusCode());
+        $this->assertSame(500, $this->client->getResponse()->getStatusCode());
 
     }
 
+    /**
+     * TEST DE CRÉATION D'UNE TÂCHE
+     */
     public function testCreateAction()
     {
-        $client = static::createClient();
-
-        $container = $client->getContainer();
-
-        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
 
         $testManager = $usertodoRepo->findOneByUsername('manager');
 
-        $client->loginUser($testManager);
+        $this->client->loginUser($testManager);
 
-        $crawler = $client->request('GET', '/tasks/create');
+        $crawler = $this->client->request('GET', '/tasks/create');
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
         $this->assertSame("Créer une nouvelle tâche", $crawler->filter('h1')->text());
 
@@ -148,26 +176,25 @@ class TaskControllerTest extends WebTestCase
 
         $form['tasktodo[content]'] = 'Description de la tâche';
 
-        $client->submit($form); 
+        $this->client->submit($form); 
 
-        $this->assertSame(302, $client->getResponse()->getStatusCode());
+        $this->assertSame(302, $this->client->getResponse()->getStatusCode());
     }
 
+    /**
+     * TEST DE MODIFICATION D'UNE TÂCHE
+     */
     public function testEditAction()
     {
-        $client = static::createClient();
-
-        $container = $client->getContainer();
-
-        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
 
         $testManager = $usertodoRepo->findOneByUsername('manager');
 
-        $client->loginUser($testManager);
+        $this->client->loginUser($testManager);
 
-        $crawler = $client->request('GET', '/tasks/1/edit');
+        $crawler = $this->client->request('GET', '/tasks/1/edit');
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
         $this->assertSame(1, $crawler->filter('input[name="tasktodo[title]"]')->count());
 
@@ -181,78 +208,76 @@ class TaskControllerTest extends WebTestCase
 
         $form['tasktodo[content]'] = 'Description de la tâche modifiée';
 
-        $client->submit($form);
+        $this->client->submit($form);
 
-        $this->assertSame(302, $client->getResponse()->getStatusCode());
+        $this->assertSame(302, $this->client->getResponse()->getStatusCode());
 
-        $crawler = $client->followRedirect();
+        $crawler = $this->client->followRedirect();
         
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
     }
 
+    /**
+     * TEST DE MODIFICATION D'UNE TÂCHE (À RÉALISER <-> TERMINÉE)
+     */
     public function testToggleTaskAction()
     {
-        $client = static::createClient();
-
-        $container = $client->getContainer();
-
-        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
 
         $testManager = $usertodoRepo->findOneByUsername('manager');
 
-        $client->loginUser($testManager);
+        $this->client->loginUser($testManager);
 
-        $crawler = $client->request('GET', '/tasks/1/toggle');
+        $this->client->request('GET', '/tasks/1/toggle');
 
-        $this->assertSame(302, $client->getResponse()->getStatusCode());
+        $this->assertSame(302, $this->client->getResponse()->getStatusCode());
 
-        $crawler = $client->followRedirect();
+        $crawler = $this->client->followRedirect();
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
+        $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
     }
 
+    /**
+     * TEST DE SUPPRESSION D'UNE TÂCHE PAR UN SIMPLE UTILISATEUR
+     */
     public function testDeleteTaskActionBySimpleUser()
     {
-        $client = static::createClient();
-
-        $container = $client->getContainer();
-
-        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
 
         $testManager = $usertodoRepo->findOneByUsername('nicolas');
 
-        $client->loginUser($testManager);
+        $this->client->loginUser($testManager);
 
-        $crawler = $client->request('GET', '/tasks/4/delete');
+        $this->client->request('GET', '/tasks/4/delete');
 
-        $this->assertSame(302, $client->getResponse()->getStatusCode());
+        $this->assertSame(302, $this->client->getResponse()->getStatusCode());
 
-        $crawler = $client->followRedirect();
+        $this->client->followRedirect();
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
     }
 
+    /**
+     * TEST DE SUPPRESSION D'UNE TÂCHE PAR UN MANAGER
+     */
     public function testDeleteTaskByManager()
     {
-        $client = static::createClient();
-
-        $container = $client->getContainer();
-
-        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
 
         $testManager = $usertodoRepo->findOneByUsername('manager');
 
-        $client->loginUser($testManager);
+        $this->client->loginUser($testManager);
 
-        $crawler = $client->request('GET', '/tasks/2/delete');
+        $this->client->request('GET', '/tasks/2/delete');
 
-        $this->assertSame(302, $client->getResponse()->getStatusCode());
+        $this->assertSame(302, $this->client->getResponse()->getStatusCode());
 
-        $crawler = $client->followRedirect();
+        $this->client->followRedirect();
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
     }
 

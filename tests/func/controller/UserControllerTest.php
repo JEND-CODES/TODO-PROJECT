@@ -7,22 +7,27 @@ use App\Repository\UsertodoRepository;
 
 class UserControllerTest extends WebTestCase
 {
+    private $client = null;
 
+    public function setUp(): void
+    {
+        $this->client = static::createClient();
+    }
+
+    /**
+     * TEST D'ACCÈS À LA LISTE DES UTILISATEURS
+     */
     public function testListAction()
     {
-        $client = static::createClient();
-
-        $container = $client->getContainer();
-
-        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
 
         $testManager = $usertodoRepo->findOneByUsername('manager');
 
-        $client->loginUser($testManager);
+        $this->client->loginUser($testManager);
 
-        $crawler = $client->request('GET', '/users');
+        $crawler = $this->client->request('GET', '/users');
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
         $this->assertSame("Liste des utilisateurs", $crawler->filter('h1')->text());
 
@@ -30,64 +35,83 @@ class UserControllerTest extends WebTestCase
 
     }
 
+    /**
+     * TESTS D'ACCÈS AUX ROUTES PROTÉGÉES DE GESTIONS DES UTILISATEURS
+     */
+    public function testProtectedPathUsersAccess()
+    {
+        $paths = [
+            ['GET', '/users'],
+            ['GET', '/users/create'],
+            ['GET', '/users/5/edit']
+        ];
+
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
+
+        $testManager = $usertodoRepo->findOneByUsername('manager');
+
+        $this->client->loginUser($testManager);
+
+        foreach ($paths as $path) {
+
+            $this->client->request($path[0], $path[1]);
+
+            $this->assertSame(200, $this->client->getResponse()->getStatusCode());
+
+        }
+
+    }
+
+    /**
+     * TEST D'ACCÈS À LA LISTE PAGINÉE DES UTILISATEURS
+     */
     public function testUsersListPaginated()
     {
-
-        $client = static::createClient();
-
-        $container = $client->getContainer();
-
-        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
 
         $testManager = $usertodoRepo->findOneByUsername('manager');
 
-        $client->loginUser($testManager);
+        $this->client->loginUser($testManager);
 
-        $client->request('GET', '/users?start=10&limit=10');
+        $this->client->request('GET', '/users?start=10&limit=10');
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
-        $tasktodoRepo = static::$container->get(UsertodoRepository::class);
-
-        $this->assertSame(200, $client->getResponse()->getStatusCode()); 
     }
 
+    /**
+     * TEST D'ERREUR GÉNÉRÉE LIÉE À LA PAGINATION (TROP D'ITEMS DEMANDÉS)
+     */
     public function testErrorForTooManyUsersRequested()
     {
-
-        $client = static::createClient();
-
-        $container = $client->getContainer();
-
-        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
 
         $testManager = $usertodoRepo->findOneByUsername('manager');
 
-        $client->loginUser($testManager);
+        $this->client->loginUser($testManager);
 
-        $client->request('GET', '/users?start=1&limit=101');
+        $this->client->request('GET', '/users?start=1&limit=101');
 
-        $this->assertSame(500, $client->getResponse()->getStatusCode());
+        $this->assertSame(500, $this->client->getResponse()->getStatusCode());
 
     }
 
+    /**
+     * TEST DE CRÉATION D'UN NOUVEL UTILISATEUR
+     */
     public function testCreateAction()
     {
-        $client = static::createClient();
-
-        $container = $client->getContainer();
-
-        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
 
         $testManager = $usertodoRepo->findOneByUsername('manager');
 
-        $client->loginUser($testManager);
+        $this->client->loginUser($testManager);
 
-        $crawler = $client->request('GET', '/users/create');
+        $crawler = $this->client->request('GET', '/users/create');
         
         $form = $crawler->selectButton('Ajouter')->form();
 
-        $form['usertodo[username]'] = 'danielle';
+        $form['usertodo[username]'] = 'Danielle';
 
         $form['usertodo[email]'] = 'danielle@test.com';
 
@@ -97,31 +121,30 @@ class UserControllerTest extends WebTestCase
 
         $form['usertodo[role]'] = 'ROLE_USER';
 
-        $client->submit($form);
+        $this->client->submit($form);
 
-        $this->assertSame(302, $client->getResponse()->getStatusCode());
+        $this->assertSame(302, $this->client->getResponse()->getStatusCode());
 
-        $crawler = $client->followRedirect();
+        $this->client->followRedirect();
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
     }
 
+    /**
+     * TEST DE MODIFICATION D'UN UTILISATEUR
+     */
     public function testEditAction()
     {
-        $client = static::createClient();
-
-        $container = $client->getContainer();
-
-        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
 
         $testManager = $usertodoRepo->findOneByUsername('manager');
 
-        $client->loginUser($testManager);
+        $this->client->loginUser($testManager);
 
-        $crawler = $client->request('GET', '/users/4/edit');
+        $crawler = $this->client->request('GET', '/users/4/edit');
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
         $this->assertSame(1, $crawler->filter('input[name="usertodo[username]"]')->count());
 
@@ -137,77 +160,74 @@ class UserControllerTest extends WebTestCase
 
         $form['usertodo[role]'] = 'ROLE_USER';
 
-        $client->submit($form);
+        $this->client->submit($form);
 
-        $this->assertSame(302, $client->getResponse()->getStatusCode());
+        $this->assertSame(302, $this->client->getResponse()->getStatusCode());
 
-        $crawler = $client->followRedirect();
+        $crawler = $this->client->followRedirect();
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
         $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
 
     }
 
+    /**
+     * TEST D'ACCÈS INTERDIT À LA PAGE DE MISE À JOUR D'UN UTILISATEUR
+     */
     public function testEditActionWithDeniedAccess()
     {
-        $client = static::createClient();
-
-        $container = $client->getContainer();
-
-        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
 
         $testAdmin = $usertodoRepo->findOneByUsername('paolo');
 
-        $client->loginUser($testAdmin);
+        $this->client->loginUser($testAdmin);
 
-        $crawler = $client->request('GET', '/users/3/edit');
+        $this->client->request('GET', '/users/3/edit');
 
-        $this->assertSame(302, $client->getResponse()->getStatusCode());
+        $this->assertSame(302, $this->client->getResponse()->getStatusCode());
 
     }
 
+    /**
+     * TEST DE SUPPRESSION D'UN UTILISATEUR
+     */
     public function testDeleteAction()
     {
-        $client = static::createClient();
-
-        $container = $client->getContainer();
-
-        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
 
         $testManager = $usertodoRepo->findOneByUsername('manager');
 
-        $client->loginUser($testManager);
+        $this->client->loginUser($testManager);
 
-        $crawler = $client->request('GET', '/users/3/delete');
+        $this->client->request('GET', '/users/3/delete');
 
-        $this->assertSame(302, $client->getResponse()->getStatusCode());
+        $this->assertSame(302, $this->client->getResponse()->getStatusCode());
 
-        $crawler = $client->followRedirect();
+        $this->client->followRedirect();
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
     }
 
-   public function testDeleteActionWithDeniedAccess()
+    /**
+     * TEST D'ACCÈS INTERDIT À LA SUPPRESSION D'UN UTILISATEUR
+     */
+    public function testDeleteActionWithDeniedAccess()
     {
-        $client = static::createClient();
-
-        $container = $client->getContainer();
-
-        $usertodoRepo = static::$container->get(UsertodoRepository::class);
+        $usertodoRepo = self::$container->get(UsertodoRepository::class);
 
         $testManager = $usertodoRepo->findOneByUsername('manager');
 
-        $client->loginUser($testManager);
+        $this->client->loginUser($testManager);
 
-        $crawler = $client->request('GET', '/users/1/delete');
+        $crawler = $this->client->request('GET', '/users/1/delete');
 
-        $this->assertSame(302, $client->getResponse()->getStatusCode());
+        $this->assertSame(302, $this->client->getResponse()->getStatusCode());
 
-        $crawler = $client->followRedirect();
+        $crawler = $this->client->followRedirect();
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
 
         $this->assertSame(1, $crawler->filter('div.alert.alert-danger')->count());
 

@@ -7,16 +7,23 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class DefaultControllerTest extends WebTestCase
 {
 
+    private $client = null;
+
+    public function setUp(): void
+    {
+        $this->client = static::createClient();
+    }
+
+    /**
+     * TEST DE REDIRECTION VERS LA PAGE LOGIN (UTILISATEUR NON AUTHENTIFIÉ)
+     */
     public function testIndexAction()
     {
+        $this->client->request('GET', '/');
 
-        $client = static::createClient();
+        $this->assertSame(302, $this->client->getResponse()->getStatusCode());
 
-        $client->request('GET', '/');
-
-        $this->assertSame(302, $client->getResponse()->getStatusCode());
-
-        $crawler = $client->followRedirect();
+        $crawler = $this->client->followRedirect();
 
         $this->assertSelectorExists('form');
 
@@ -24,37 +31,28 @@ class DefaultControllerTest extends WebTestCase
 
         $this->assertSame(1, $crawler->filter('input[name="_password"]')->count());
     }
-    
-    public function testIndex()
-    {
-        $client = static::createClient();
 
-        $crawler = $client->request('GET', '/');
-
-        // Code 302 indique que l'on a trouvé la route après redirection
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
-
-    }
-
+    /**
+     * AUTRE FORMAT DE TEST DE REDIRECTION
+     */
     public function testRedirect()
 	{
-        $client = static::createClient();
+		$this->client->request('GET', '/');
 
-		$crawler = $client->request('GET', '/');
+		$this->client->followRedirect();
 
-		$client->followRedirect();
-
-		$this->assertEquals(200, $client->getResponse()->getStatusCode());
+		$this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 
 	}
 
+    /**
+     * TEST DE PAGE ERRONÉE
+     */
     public function testErrorPage()
     {
-        $client = static::createClient();
+        $this->client->request('GET', '/azerty');
 
-        $client->request('GET', '/azerty');
-
-        $this->assertEquals(404, $client->getResponse()->getStatusCode());
+        $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
     }
 
 }
