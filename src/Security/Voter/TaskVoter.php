@@ -54,7 +54,7 @@ class TaskVoter extends Voter
 		throw new \LogicException('This code should not be reached!');
 	}
 
-	private function canDelete(Tasktodo $task)
+	private function canDelete(Tasktodo $task): bool
 	{
         if($this->security->getUser() === $task->getUsertodo()) {
 
@@ -69,6 +69,8 @@ class TaskVoter extends Voter
             }
 
         }
+
+		return false;
 
 	}
     

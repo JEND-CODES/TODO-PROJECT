@@ -57,7 +57,7 @@ class UserVoter extends Voter
 		throw new \LogicException('This code should not be reached!');
 	}
 
-    private function checkAuthorization(Usertodo $user)
+    private function checkAuthorization(Usertodo $user): bool
 	{
         if (($this->security->getUser()->getId() === $user->getId()) || 
             (!$this->security->isGranted('ROLE_SUPER_ADMIN') && $user->getRole() === 'ROLE_ANONYMOUS') || 
@@ -65,11 +65,10 @@ class UserVoter extends Voter
         {
             return false;
 
-        } else {
+        } 
 
-            return true;
+        return true;
 
-        }
 
 	}
     
